@@ -241,15 +241,16 @@ class GroqClient(BaseLLMClient):
     """
     Client for Groq API (FREE & FAST!)
     Get free API key at: https://console.groq.com/keys
-    Models: llama3-8b, llama3-70b, mixtral-8x7b, gemma-7b
+    Groq retired its Llama/Mixtral/Gemma chat models, so the old short
+    names now map to the currently hosted gpt-oss models.
     """
 
     FREE_MODELS = {
-        "llama3-8b": "llama-3.1-8b-instant",
-        "llama3-70b": "llama-3.1-70b-versatile",
-        "mixtral": "mixtral-8x7b-32768",
-        "gemma": "gemma2-9b-it",
-        "llama3-versatile": "llama-3.3-70b-versatile"
+        "llama3-8b": "openai/gpt-oss-20b",
+        "llama3-70b": "openai/gpt-oss-120b",
+        "mixtral": "openai/gpt-oss-20b",
+        "gemma": "openai/gpt-oss-20b",
+        "llama3-versatile": "openai/gpt-oss-120b"
     }
 
     def __init__(self, config: LLMConfig):
