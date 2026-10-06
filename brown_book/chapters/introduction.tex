@@ -1,0 +1,137 @@
+\chapter{Introduction}
+\label{ch:intro}
+
+\section{Background}
+\label{sec:background}
+
+Stories are one of the oldest ways in which people share knowledge, values and experience. Children learn through them, teachers use them to explain difficult ideas, and whole industries in publishing, film and games are built around them. For most of history a story has been something written by one person and read by another. The reader could interpret it, but could not change it.
+
+Computers have been used to generate stories since the 1970s. Early systems such as TALE-SPIN~\citep{meehan1977talespin} used hand-written rules and story grammars to produce short fables in a closed world. Statistical and recurrent neural models later learned patterns from collections of stories, but they struggled to stay coherent for more than a few sentences. The transformer architecture~\citep{vaswani2017attention} changed this. Its attention mechanism lets a model relate words that are far apart in a text, and large models trained on very large corpora became able to write long passages that read naturally~\citep{brown2020gpt3,openai2023gpt4,touvron2023llama,jiang2023mistral}.
+
+Modern Large Language Models (LLMs) such as the GPT series~\citep{openai2023gpt4}, LLaMA~\citep{touvron2023llama}, BERT and T5~\citep{devlin2019bert} and BART~\citep{lewis2020bart} can now understand natural-language requests, keep track of context over a conversation and write text with a chosen tone and style. These abilities make it possible to change how stories are made. Instead of giving the user a finished story, a system can ask the user what they want, listen to the answers and build the story with them. Q\&A based story generation follows this idea. The interaction becomes a guided dialogue from which the story grows, and the user becomes a co-author rather than a reader.
+
+\section{Motivation}
+\label{sec:motivation}
+
+Most current AI story tools work on a single prompt. The user writes one request and the model returns one story. This way of working has several practical problems:
+
+\begin{itemize}
+    \item \textbf{Preferences must be known in advance.} The user has to describe genre, characters, setting and mood in one go. Many users find this hard, and they often discover what they want only after they see a first draft.
+    \item \textbf{Generic output.} A short prompt leaves most decisions to the model, so stories tend to look alike and do not reflect the individual user.
+    \item \textbf{No control during the story.} Once generation has started, the user cannot steer the plot, add a character or change direction without starting again.
+    \item \textbf{Text only.} Most tools produce plain text. Pictures, narration and music, which make stories more engaging, have to be added by hand with other tools.
+\end{itemize}
+
+Interactive storytelling is useful in many areas. In education, stories that adapt to a learner's interest improve attention and recall. In entertainment and games, players want to shape the outcome through their own choices. In therapy, personalised narratives are used to support reflection and emotional processing. In content creation and marketing, there is demand for personalised stories at scale. Finally, a guided Q\&A process makes creative writing accessible to people who have rich ideas but little experience of writing. These needs were the main motivation for this work.
+
+\section{Problem Statement}
+\label{sec:problem}
+
+Existing story-generation systems face both technical and user-experience limitations:
+
+\begin{enumerate}
+    \item \textbf{Limited context.} An LLM can attend only to a fixed number of tokens. As a story grows, early details can be forgotten or contradicted.
+    \item \textbf{Loss of coherence.} When a user adds input at several points, each new input can introduce small inconsistencies in plot, characters or tone, and these build up over time.
+    \item \textbf{Difficulty in reading intent.} Free-text answers are often vague or indirect, and turning them into clear story decisions is not straightforward.
+    \item \textbf{Balance between control and quality.} Giving the user full control can lead to a poorly structured story, while giving too little control reduces personalisation.
+    \item \textbf{Multimodal delays and failures.} Adding images, narration and music introduces extra latency and, with free services, rate-limit errors that the interface must hide.
+    \item \textbf{No reader aids.} Few tools give readers a view of the story structure or of the characters, which makes longer stories hard to follow.
+\end{enumerate}
+
+The problem addressed in this dissertation can therefore be stated as follows: \emph{to design and implement a system that collects a user's story preferences through a structured, real-time question-and-answer dialogue, turns them into a coherent and personalised multi-chapter story using a large language model, enriches the story with illustration, narration and ambient music, and lets the user extend the question set with their own questions, while remaining independent of any single model provider and running on ordinary hardware at little or no cost.}
+
+\section{Objectives of the Study}
+\label{sec:objectives}
+
+The specific objectives of this work are:
+
+\begin{enumerate}
+    \item \textbf{Structured input.} To design a Q\&A framework that captures user preferences through natural conversation, with budgets of 4, 8, 12 and 17 questions ordered across setting, character, theme and plot, a custom-answer option for every question, and a way for users to add their own questions.
+    \item \textbf{Personalised generation.} To build LLM-based story generation that reflects the user's answers and works with Ollama, Groq, Hugging Face and OpenAI, with the provider switchable at run time.
+    \item \textbf{Narrative coherence.} To keep stories consistent across many turns using a five-phase story-flow model and a consistency checker for character, plot, pacing, setting and tone problems.
+    \item \textbf{Multimodal output.} To add a scene illustration for each segment, voice narration and genre-matched ambient music, all driven by the current segment and the detected genre.
+    \item \textbf{Reader analytics.} To provide a Story Map and a Character Relationship Graph that help readers navigate the generated story.
+    \item \textbf{Evaluation.} To evaluate the system with automatic measurements and a user study covering coherence, creativity, engagement, consistency and personalisation.
+\end{enumerate}
+
+The measurable targets set at the start of the work are listed in Table~\ref{tab:targets}.
+
+\begin{table}[H]
+\centering
+\caption{Measurable performance targets.}
+\label{tab:targets}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|l|c|l|}
+\hline
+\textbf{Metric} & \textbf{Target} & \textbf{Method} \\
+\hline
+Narrative coherence score   & $>$ 85\%  & Discourse analysis \\
+User-preference alignment   & $>$ 80\%  & Likert vs.\ stated preference \\
+User satisfaction rating    & $>$ 4.0/5 & Post-session survey \\
+Context retention accuracy  & $>$ 90\%  & Cross-segment consistency \\
+Response latency (cloud)    & $<$ 5\,s  & End-to-end timing \\
+Session completion rate     & $>$ 75\%  & Sessions completed / started \\
+Image generation success    & $>$ 95\%  & Success on first try or retry \\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Research Questions}
+\label{sec:rq}
+
+The work is guided by the following questions:
+
+\begin{enumerate}
+    \item How can a structured Q\&A dialogue capture a user's preferences for genre, tone, characters, plot and theme well enough to drive story generation?
+    \item Which design choices allow an LLM to keep a story coherent over several turns while still taking in new user input?
+    \item How should the story context be stored and selected so that important details are kept while the story is free to develop?
+    \item Which measures are suitable for judging an interactive storytelling system on coherence, personalisation, engagement and creativity?
+    \item How can user control be balanced against the need for a well-structured story?
+\end{enumerate}
+
+\section{Scope of the Work}
+\label{sec:scope}
+
+The scope of this work is defined as follows:
+
+\begin{itemize}
+    \item \textbf{Text first.} The story is text, supported by illustration, narration and ambient music. Video generation is outside the scope.
+    \item \textbf{English only.} Stories are generated in English. Other languages are left for future work.
+    \item \textbf{Fiction genres.} The system supports eight genres: fantasy, science fiction, mystery, romance, thriller, adventure, horror and comedy.
+    \item \textbf{Single user.} Each session is used by one person. Multi-user collaborative stories are future work.
+    \item \textbf{Short to medium length.} Stories range from about 500 to 5,000 words, usually in two to six chapters.
+\end{itemize}
+
+\section{Significance of the Study}
+\label{sec:significance}
+
+On the practical side, the study shows that a complete interactive storytelling system with pictures, narration and music can be built entirely from free and open-source components and run on a single laptop. The free Groq tier gives story segments in under two seconds, so the approach is usable by schools, small studios and individual creators who do not have large budgets.
+
+On the research side, the work introduces the \texttt{custom\_elements} context channel, a simple pattern that lets end users add their own questions and have the answers reach the model's prompt without any change to code or database schema. The pattern is not specific to stories and can be used in any LLM application that needs user-extensible personalisation. The study also reports a reproducible evaluation with 50 stories and 15 participants, and reports the limits of its own components openly, for example by labelling the character graph as a co-appearance graph.
+
+\section{Contributions}
+\label{sec:contributions}
+
+The main contributions of this dissertation are:
+
+\begin{enumerate}
+    \item A Q\&A framework for interactive storytelling with 17 questions over four narrative dimensions and four selectable budgets.
+    \item A seven-module backend pipeline that separates context extraction, prompt engineering and story-arc control and does not depend on any one LLM provider.
+    \item A multimodal layer with sentence-scored text-to-image prompts, browser-based narration and genre-matched ambient music, together with a serial request queue that prevents rate-limit failures.
+    \item Two D3-based reader aids: a Story Map of the chapters and a Character Relationship Graph.
+    \item An end-user authoring layer that accepts custom answers and user-added questions and passes them to the model through the \texttt{custom\_elements} channel.
+    \item An evaluation covering latency, narrative quality, user satisfaction, consistency checking, image throughput and a question-budget ablation.
+\end{enumerate}
+
+\section{Structure of the Report}
+\label{sec:structure}
+
+The rest of this report is organised as follows.
+
+\textbf{Chapter 2} reviews the literature on automated story generation. It covers rule-based and neural approaches, interactive storytelling systems and multimodal co-creation, and ends with the research gaps that this work addresses.
+
+\textbf{Chapter 3} describes the proposed methodology and system design. It covers the feasibility study, the project plan, the system architecture, the Q\&A framework, the algorithms, the seven backend modules, the multimodal pipelines, the implementation and the evaluation method.
+
+\textbf{Chapter 4} presents the testing and experimental results and discusses them. It covers latency, narrative quality, user satisfaction, consistency checking, image throughput, character extraction, the question-budget ablation and a comparison with existing systems.
+
+\textbf{Chapter 5} concludes the report, summarises the main findings, lists the limitations and outlines directions for future work.

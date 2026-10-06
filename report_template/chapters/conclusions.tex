@@ -1,0 +1,156 @@
+\chapter{Conclusion and Future Scope}
+\label{ch:conclusion}
+
+\section{Summary of the Study}
+This dissertation has presented the design, implementation and
+evaluation of a comprehensive Q\&A based interactive storytelling
+system powered by Large Language Models. The system positions users
+as active co-creators rather than passive consumers of narrative
+content. Through a structured 17-question elicitation protocol
+across four narrative dimensions (setting, character, theme, plot),
+a seven-module backend pipeline, and a provider-agnostic LLM layer,
+the system transforms user preferences into coherent, personalised,
+multi-chapter stories.
+
+Beyond text, the system delivers a multimodal reader experience:
+per-segment scene illustrations are synthesised on demand via
+Pollinations.ai using a sentence-scored prompt extractor and a
+serial-throttled request queue; spoken narration is produced through
+the W3C Web Speech Synthesis interface; and genre-conditioned ambient
+music is streamed from a royalty-free CDN. Reader analytics surface
+through a D3-based Story Map and a Character Relationship Graph
+that openly disclaim their co-appearance basis. An end-user
+authoring layer admits free-form custom answers and entirely
+user-added Q\&A pairs, routed through a dedicated
+\texttt{custom\_elements} context channel into the LLM prompt.
+
+\section{Main Findings}
+\begin{itemize}
+    \item Across 50 generated stories and 15 user-study participants,
+    the system achieved mean Likert scores of 4.05 / 5 (coherence),
+    4.12 / 5 (creativity), 4.35 / 5 (engagement) and 3.75 / 5
+    (consistency).
+    \item Groq's free LLaMA-3.1-8B cloud inference delivered a 1.8\,s
+    mean initial-segment latency, dramatically faster than local
+    Ollama (12.4\,s) and competitive with paid OpenAI GPT-3.5-turbo
+    (2.6\,s).
+    \item The 12-question budget emerged as the recommended default:
+    it pushes personalisation past 4.3 / 5 while keeping elicitation
+    time under three minutes.
+    \item The serial throttling queue reduced image-API failure
+    probability from $\approx$70\% to $<$2\% under 5$\times$ parallel
+    load.
+    \item Filtering and a min-2 occurrence threshold raised
+    character-extraction $F_1$ from 0.71 to 0.80 while halving the
+    false-positive rate.
+\end{itemize}
+
+\section{Contributions to Knowledge}
+\begin{enumerate}
+    \item \textbf{Novel Q\&A framework} for interactive
+    storytelling that enables real-time personalisation through
+    conversational interaction across four canonical narrative
+    dimensions.
+    \item \textbf{Custom-elements context channel} --- a deployable
+    architectural pattern that lets end users inject unstructured
+    Q\&A pairs into the LLM prompt without code or schema changes;
+    generalises beyond storytelling to any LLM-driven application
+    requiring extensible personalisation.
+    \item \textbf{Sentence-scored visual prompt extractor} that
+    mitigates dialogue and inner-thought contamination when feeding
+    story text into a text-to-image model.
+    \item \textbf{Cross-modal serial-throttling queue} that prevents
+    Cloudflare-fronted free image services from rate-limiting
+    bursty generation; image-synthesis success rate exceeds 95\%
+    after retries.
+    \item \textbf{Deliberately disclaimed} co-appearance reader graph,
+    establishing a pattern of \emph{honest reporting} for
+    visualisations whose underlying inference is statistical rather
+    than semantic.
+\end{enumerate}
+
+\section{Practical Implications}
+The dissertation has practical implications for several stakeholder
+groups:
+
+\begin{itemize}
+    \item \textbf{Educators} can use the system to create
+    personalised story-based tutorials that adapt to learner
+    understanding and interest.
+    \item \textbf{Game designers} can adopt the Q\&A elicitation
+    pattern to capture rich player preferences without sacrificing
+    narrative control.
+    \item \textbf{Therapists} can pilot the system as a narrative-
+    therapy adjunct that respects user agency.
+    \item \textbf{Content creators} can prototype scalable
+    personalised storytelling for marketing or children's literature
+    at near-zero infrastructure cost.
+    \item \textbf{Researchers} benefit from an open-source baseline
+    \cite{jha2026repo} for future studies on interactive narrative.
+\end{itemize}
+
+\section{Limitations of the Study}
+Several limitations bound the present work:
+
+\begin{itemize}
+    \item Keyword-based context extraction misses paraphrastic user
+    inputs; a fine-tuned BERT/DistilBERT \cite{devlin2019bert,sanh2019distilbert}
+    or LLM zero-shot classifier would improve recall.
+    \item In-memory session storage limits horizontal scalability;
+    Redis-backed sessions are required for distributed deployment.
+    \item The consistency checker is pattern-based and lacks
+    semantic grounding; cross-segment NLI \cite{williams2018mnli}
+    is a natural upgrade.
+    \item Image quality inherits the ceiling of Pollinations.ai
+    \cite{pollinations2024api}; switching to local Stable
+    Diffusion~XL \cite{podell2024sdxl} or FLUX.1 \cite{bfl2024flux}
+    would improve consistency at the cost of GPU requirement.
+    \item Ambient music is hot-linked rather than locally hosted,
+    creating a single-point dependency on SoundHelix's availability.
+    \item The character relationship graph is openly disclaimed as
+    co-appearance --- a genuine relationship-extraction module
+    would require per-segment NLU inference.
+    \item User-study sample size ($n=15$) is modest by HCI standards
+    and skews young (ages 22--35); a larger and more diverse cohort
+    would strengthen external validity.
+\end{itemize}
+
+\section{Future Scope}
+Building on the foundation established by this dissertation, several
+directions for future research emerge:
+
+\begin{itemize}
+    \item \textbf{Semantic context extraction} via DistilBERT or
+    zero-shot LLM classification, replacing keyword dictionaries.
+    \item \textbf{Sentiment-aware relationship-extraction graph}
+    using small NLU models per segment.
+    \item \textbf{On-device image generation} with local Stable
+    Diffusion~XL or FLUX.1 for offline operation and per-character
+    visual consistency.
+    \item \textbf{Neural TTS} (e.g.\ XTTS \cite{casanova2024xtts})
+    with cloned voices for character-specific narration.
+    \item \textbf{Music conditioned by current segment mood}
+    (per-segment crossfade) rather than per-genre static loops.
+    \item \textbf{Collaborative multi-user sessions} with merged
+    Q\&A elicitation and turn-taking.
+    \item \textbf{Containerisation} (Docker) plus Redis sessions
+    for distributed deployment.
+    \item \textbf{Automated evaluation} using BLEU, chrF, MAUVE and
+    narrative-arc detection \cite{lin2024evalnarrate}.
+    \item \textbf{Fine-tuned LoRA adapters} per genre on curated
+    open story corpora.
+\end{itemize}
+
+\section{Final Thoughts}
+The remarkable progress of LLMs has put high-quality text generation
+within reach of every developer, but \emph{turning text generation
+into a great storytelling experience} remains a design challenge,
+not just a capability challenge. This dissertation has argued and
+demonstrated that the missing ingredient is a clean separation
+between \emph{what the system asks the user} and \emph{what it does
+with the answers}. By making the elicitation protocol structured but
+extensible, the LLM provider pluggable and the modalities
+orchestrated rather than bolted on, the system delivers a
+storytelling experience that is at once accessible to first-time
+users and extensible by curious ones. The code is open-source
+\cite{jha2026repo}; the framework is ready for adoption.

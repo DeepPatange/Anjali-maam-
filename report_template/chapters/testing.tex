@@ -1,0 +1,150 @@
+\chapter{Testing}
+\label{ch:testing}
+
+\section{Testing Strategy}
+The system was validated using a layered testing strategy that
+combined static analysis, unit tests on the Python backend, end-to-end
+manual UI walkthroughs, and a fifteen-participant user study. The
+strategy was designed to catch defects at the lowest cost: failures
+of the prompt schema were caught by Pydantic at the request boundary;
+LLM-side regressions were caught by golden-output comparison; and
+multimodal pipeline failures were detected through deliberate
+fault-injection (e.g.\ rate-limited image responses).
+
+\section{Unit Testing}
+Unit tests cover the deterministic portions of the backend:
+context-extraction projections, the five-phase finite-state machine,
+the prompt-builder template engine and the SQLite persistence layer.
+Each test is parameterised across all four narrative phases. The
+test suite is executed with \texttt{pytest} and runs in under three
+seconds on the development machine.
+
+\begin{table}[!t]
+\caption{Unit-test coverage by module.}
+\label{tab:unittests}
+\centering
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Module}                & \textbf{Tests} & \textbf{Line cov.} \\
+\midrule
+\texttt{user\_input}            & 14 & 92\% \\
+\texttt{context\_extraction}    & 22 & 89\% \\
+\texttt{knowledge\_memory}      & 11 & 84\% \\
+\texttt{prompt\_engineering}    & 18 & 91\% \\
+\texttt{story\_flow\_manager}   & 16 & 88\% \\
+\texttt{output\_formatter}      &  9 & 95\% \\
+\midrule
+\textbf{Overall}                & \textbf{90} & \textbf{89.8\%} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Integration Testing}
+End-to-end integration tests exercise the full session lifecycle:
+\begin{enumerate}
+    \item \texttt{POST /api/session/new} -- create session.
+    \item \texttt{GET  /api/questions/all} -- fetch all questions.
+    \item \texttt{POST /api/response} (loop) -- submit answers.
+    \item \texttt{POST /api/story/generate} -- generate first segment.
+    \item \texttt{POST /api/story/continue} -- continue from choice.
+    \item \texttt{GET  /api/story/full/\{id\}} -- retrieve full story.
+    \item \texttt{DELETE /api/session/\{id\}} -- end session.
+\end{enumerate}
+All seven steps are exercised once per provider (Ollama, Groq,
+Hugging Face, OpenAI). Integration tests use \texttt{httpx.AsyncClient}
+hitting an in-process FastAPI instance.
+
+\section{API Testing}
+Each REST endpoint was validated for: (i) correct status code on
+success and failure, (ii) Pydantic-schema rejection of malformed
+payloads, (iii) idempotency of session reads, (iv) graceful
+handling of unknown session IDs (404 rather than 500). A summary
+of API test outcomes appears in Table~\ref{tab:apitests}.
+
+\begin{table}[!t]
+\caption{API testing outcomes.}
+\label{tab:apitests}
+\centering
+\renewcommand{\arraystretch}{1.15}
+\small
+\begin{tabular}{@{}llcc@{}}
+\toprule
+\textbf{Endpoint} & \textbf{Tests} & \textbf{Pass} & \textbf{Notes} \\
+\midrule
+\texttt{/api/status}                  & 4  & 4  & Provider availability \\
+\texttt{/api/session/new}             & 3  & 3  & UUID format \\
+\texttt{/api/questions/all}           & 2  & 2  & Phase order \\
+\texttt{/api/response}                & 8  & 8  & Including custom\_q\_N \\
+\texttt{/api/story/generate}          & 6  & 6  & All 4 providers \\
+\texttt{/api/story/continue}          & 6  & 6  & With/without choice \\
+\texttt{/api/settings}                & 5  & 5  & Hot-swap validated \\
+\texttt{/api/session/\{id\}/summary}  & 3  & 3  & Word/segment counts \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{UI / End-to-End Testing}
+Manual end-to-end walkthroughs were performed against the four
+browsers used during development (Chrome 124, Safari 17, Firefox 124,
+Edge 124). The walkthrough covers: question budget selection,
+question form filling with custom answers, custom-question authoring,
+story generation, image rendering, narration playback, ambient music
+toggle, Story Map modal, Character Graph modal and the admin panel.
+
+\section{Multimodal Robustness Testing}
+
+\subsection{Image-API Fault Injection}
+To validate the throttle queue's robustness, we deliberately fired
+five concurrent image-generation requests across the prompt-length
+range 80--380 characters. Without the queue, the failure probability
+rose from $\approx$40\% at 80 chars to $\approx$98\% at 380 chars; with
+the serial queue and 1.2\,s spacing, failures dropped to below 2\%
+across the same range. These results are quantified in
+Chapter~\ref{ch:results}.
+
+\subsection{Audio Autoplay Policy}
+The browser autoplay policy blocks programmatic
+\texttt{Audio.play()} unless a recent user gesture has occurred.
+We verified that the ambient-music toggle satisfies this requirement by
+delaying the first \texttt{play()} call until the user clicks the
+toggle on the actual story view; once unblocked, subsequent plays
+work for the session lifetime.
+
+\subsection{Cross-Origin Audio}
+A defect in an early implementation set
+\texttt{audio.crossOrigin = 'anonymous'} which caused the audio
+load to fail because SoundHelix does not return
+\texttt{Access-Control-Allow-Origin} headers. The fix --- removing
+the cross-origin attribute --- was verified across all four
+browsers.
+
+\section{Consistency-Checker Evaluation}
+The active consistency checker was tested against 50 ground-truth
+annotated story segments. Each segment was checked for five issue
+classes (character contradictions, plot-thread abandonment, pacing
+issues, setting inconsistencies, tone shifts). Detection rates
+ranged from 68\% (tone shifts) to 87\% (character contradictions);
+detailed numbers appear in Chapter~\ref{ch:results}.
+
+\section{Performance Testing}
+End-to-end latency was benchmarked across all four providers. Groq
+LLaMA-3.1-8B is the fastest at 1.8\,s mean initial segment, while
+local Ollama runs in 12.4\,s on the development MacBook. The
+detailed breakdown appears in Figure~\ref{fig:latency-results}
+of Chapter~\ref{ch:results}.
+
+\section{Acceptance Criteria}
+The system was deemed to meet acceptance when:
+\begin{itemize}
+    \item All seven integration steps complete on at least three of
+    four providers without manual intervention.
+    \item Mean Likert score across the four narrative dimensions
+    exceeds 3.8 / 5.
+    \item Image-generation success rate exceeds 95\% after retries.
+    \item Story-Map and Character-Graph modals render in under
+    500\,ms for stories of up to ten segments.
+    \item No critical bug remains open after the final user-study
+    debrief.
+\end{itemize}
+All acceptance criteria were met before submission.

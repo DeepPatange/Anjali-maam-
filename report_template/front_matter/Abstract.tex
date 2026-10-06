@@ -1,0 +1,60 @@
+\thispagestyle{empty}
+
+\begin{center}
+{\Large {\bf \uppercase{ABSTRACT}}}
+\end{center}
+
+\vspace{\baselineskip}
+\hrule
+\vspace{2\baselineskip}
+
+\justifying
+\setlength{\parskip}{0.6em}
+
+Question--answer based story generation is an emerging direction in
+Generative Artificial Intelligence that transforms passive narrative
+consumption into active human--AI co-creation. With remarkable
+advancements in Large Language Models (LLMs) such as GPT-3, GPT-4,
+LLaMA, Mistral, BART and T5, machines have achieved unprecedented
+capabilities in understanding natural-language queries, capturing
+nuanced user intent and producing personalised, emotionally engaging
+stories.
+
+This dissertation presents the design, implementation and evaluation
+of a comprehensive Q\&A based interactive storytelling system. The
+system uses a structured 17-question elicitation protocol across four
+narrative dimensions (setting, character, theme, plot) to gather user
+preferences, and routes them through a seven-module backend pipeline
+comprising User Input Acquisition, Context Extraction, Knowledge and
+Memory, Prompt Engineering, LLM-based Story Generation, Story Flow
+and Consistency Management, and Output Formatting. The framework is
+provider-agnostic and supports local (Ollama) as well as cloud
+inference (Groq, Hugging Face, OpenAI), enabling deployment across a
+wide range of cost and latency budgets.
+
+Beyond text, the system delivers a multimodal reader experience:
+per-segment scene illustrations are synthesised on demand via the
+Pollinations.ai diffusion service using a sentence-scored prompt
+extractor and a serial-throttled request queue; spoken narration is
+produced through the W3C Web Speech Synthesis interface; and
+genre-conditioned ambient music is streamed from a royalty-free CDN
+with time-aligned cross-fades. Reader analytics are surfaced through
+a D3-based Story Map and a Character Relationship Graph derived from
+filtered co-appearance statistics. An end-user authoring layer
+admits free-form custom answers per question and entirely user-added
+Q\&A pairs, which are routed through a dedicated
+\texttt{custom\_elements} context channel into the LLM prompt.
+
+Empirical evaluation across 50 generated stories and 15 user-study
+participants reports mean Likert scores of 4.05/5 (coherence),
+4.12/5 (creativity), 4.35/5 (engagement) and 3.75/5 (consistency); a
+1.8\,s Groq--LLaMA-3.1-8B cloud latency per initial segment; an
+overall satisfaction of 4.3/5; and a character-detection $F_1$ of
+0.80 after stop-word filtering and a min-2 occurrence threshold.
+
+\vspace{0.5\baselineskip}
+{\large \bf{Keywords}: }
+Generative AI, Large Language Models, Interactive Storytelling,
+Question--Answer Systems, Narrative Generation, Prompt Engineering,
+Multimodal Co-creation, Text-to-Image Synthesis, Text-to-Speech,
+Human--AI Collaboration, FastAPI, D3.js visualisation.

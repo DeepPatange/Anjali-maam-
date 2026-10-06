@@ -1,0 +1,60 @@
+\begin{appendices}
+
+\chapter{Sample API Exchange}
+
+The following request and response were captured during the user study. They show how a user-added question (\texttt{custom\_q\_1}) travels through the normal response path into the story prompt.
+
+\begin{lstlisting}
+POST /api/story/generate
+{
+  "session_id": "a1b2c3d4-...",
+  "responses": {
+    "setting_1":  "A magical fantasy realm",
+    "char_1":     "Elena",
+    "char_2":     "Brave and resourceful",
+    "theme_1":    "Fantasy",
+    "plot_1":     "Person vs. Supernatural",
+    "custom_q_1": "Should the protagonist have an animal
+                   companion? -> Yes, a silver fox"
+  }
+}
+
+HTTP/1.1 200 OK
+{
+  "content":       "In the realm of Aethermoor...",
+  "word_count":    387,
+  "segment_count": 1,
+  "phase":         "introduction",
+  "choices": ["Explore further", "..."]
+}
+\end{lstlisting}
+
+\chapter{System Summary and Reproducibility}
+
+\begin{table}[H]
+\centering
+\caption{Summary of the final system.}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Item} & \textbf{Value} \\
+\hline
+Backend modules          & 7, plus \texttt{main.py}, \texttt{config.py}, \texttt{run.py} \\
+Database tables          & 5 \\
+Questions                & 17 across 4 phases \\
+LLM providers            & 4 (Ollama, Groq, Hugging Face, OpenAI) \\
+Image generation         & Pollinations.ai \\
+Narration                & W3C Web Speech Synthesis \\
+Ambient music            & SoundHelix (8 genres) \\
+Export formats           & TXT, Markdown, HTML \\
+Story phases             & 5 (Freytag) \\
+Visualisations           & Story Map, Character Graph (D3) \\
+Stories evaluated        & 50 \\
+User-study participants  & 15 \\
+\hline
+\end{tabular}
+\end{table}
+
+All experiments were run on macOS~14 with Python 3.11.5, \texttt{matplotlib} 3.9.4 and \texttt{numpy} 2.0.2. Image timings were measured over a 100\,Mbps residential connection; on slower connections the spacing of the serial queue should be increased. The source code, the user-study questionnaire and the figure-generation scripts are available at \url{https://github.com/DeepPatange/AI-Stroy-Generator}.
+
+\end{appendices}

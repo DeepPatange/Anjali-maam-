@@ -6,3 +6,13 @@ __pycache__/
 *.db
 .DS_Store
 server.log
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.blg
+*.out
+*.toc
+*.lof
+*.lot
+*.synctex.gz

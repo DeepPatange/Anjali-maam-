@@ -1,0 +1,185 @@
+\chapter{Problem Statement, Objectives and Scope}
+\label{ch:problem}
+
+\section{Context and Background}
+Despite major progress in generative AI and large language models
+over the past five years, current story-generation systems remain
+fundamentally limited in their ability to create truly personalised
+and engaging narrative experiences. The dominant paradigm of
+prompt-based generation, while producing impressive individual
+outputs, fails to capture the iterative, collaborative nature of
+effective storytelling.
+
+Existing models are unable to convert step-by-step user responses
+into coherent, personalised and context-rich stories. The single-shot
+generation approach requires users to articulate all preferences
+upfront, a cognitively demanding task that many users find unnatural
+and limiting. This approach also prevents the discovery of preferences
+that emerge through interaction --- users often do not know what they
+want until they see initial results and can react to them.
+
+\section{Technical Challenges}
+Current storytelling systems face several interconnected technical
+challenges:
+
+\begin{itemize}
+    \item \textbf{Context-window limitations.} LLMs have finite
+    context windows that constrain their ability to maintain
+    awareness of all relevant story elements across extended
+    narratives. As stories grow longer, early elements may be
+    forgotten or contradicted.
+    \item \textbf{Coherence degradation.} Systems often lose
+    narrative consistency in plot, characters and emotional flow when
+    multiple user inputs are involved. Each new input can introduce
+    inconsistencies that compound over time.
+    \item \textbf{Intent interpretation.} Accurately interpreting
+    user intent from natural-language responses requires sophisticated
+    understanding of context, implication and preference inference
+    that current systems handle imperfectly.
+    \item \textbf{Balancing agency and quality.} Giving users
+    complete control over narrative direction can lead to incoherent
+    or poorly structured stories, while limiting control reduces
+    personalisation. Finding the right balance is challenging.
+    \item \textbf{Multimodal latency and rate limiting.} Augmenting
+    text with images, audio and ambient sound introduces additional
+    latency and rate-limit failure modes that must be hidden behind a
+    smooth UI.
+\end{itemize}
+
+\section{User Experience Limitations}
+From a user experience perspective, current systems present several
+significant limitations:
+
+\begin{itemize}
+    \item No framework exists that allows users to control the
+    story's theme, tone, genre or direction through an interactive
+    Q\&A process.
+    \item Generic story outputs fail to reflect individual user
+    personalities, interests and emotional states.
+    \item The lack of iterative refinement means users cannot guide
+    stories toward desired outcomes based on how narratives develop.
+    \item Absence of explanation or transparency in generation
+    decisions prevents users from understanding why stories develop
+    in particular directions.
+    \item Existing tools rarely surface reader analytics (such as
+    chapter trees or character maps) that would help readers
+    navigate or revisit complex narratives.
+\end{itemize}
+
+\section{Problem Statement}
+Existing AI-based story-generation systems cannot capture user
+responses through structured, real-time conversational interaction
+and convert them into coherent, multimodal, personalised stories.
+There is a clear need for an intelligent system that elicits user
+preferences through a guided Q\&A protocol, maintains narrative
+coherence across extended interactions, integrates illustration,
+narration and ambient music as first-class modalities, and admits
+end-user extension of the elicitation protocol --- all while
+remaining provider-agnostic, deployable on commodity hardware and
+freely accessible.
+
+\section{Research Objectives}
+
+\subsection{Primary Objectives}
+\textbf{O1. Structured Input Design.} Design and implement a
+comprehensive Q\&A framework that systematically captures user
+preferences through natural conversational interaction. The framework
+shall support 4, 8, 12 and 17-question budgets, phase-ordered across
+setting, character, theme and plot dimensions, and shall offer a
+per-question custom-answer override as well as user-added question
+authoring.
+
+\textbf{O2. Personalised Story Generation.} Create LLM-based
+generation capabilities that produce deeply personalised narratives
+reflecting individual user characteristics. The generator shall be
+provider-agnostic across Ollama, Groq, Hugging Face and OpenAI and
+shall support runtime switching without restart.
+
+\textbf{O3. Narrative Coherence Control.} Ensure generated narratives
+maintain consistency and quality across extended multi-turn
+interactions. A five-phase story-flow model with word-count thresholds
+shall drive Freytag-arc progression; an active consistency checker
+shall flag character contradictions, plot-thread abandonment, pacing
+issues, setting inconsistencies and tone shifts.
+
+\textbf{O4. Multimodal Augmentation.} Add per-segment scene
+illustration, voice narration and genre-conditioned ambient music as
+orchestrated companions of the text, dynamically conditioned on the
+current segment content and detected genre.
+
+\textbf{O5. Reader Analytics.} Surface a Story Map (branch tree) and a
+Character Relationship Graph for readers to navigate the generated
+content, with an explicit co-appearance disclaimer in the UI.
+
+\textbf{O6. Story Quality Evaluation.} Establish robust metrics and
+evaluation methodologies that combine LLM-based discourse scoring with
+structured human Likert ratings across coherence, creativity,
+engagement, consistency and personalisation dimensions.
+
+\subsection{Secondary Objectives}
+\begin{itemize}
+    \item Create reusable, modular components that can be adapted
+    for different storytelling domains (education, entertainment,
+    therapy, marketing).
+    \item Develop well-documented REST API interfaces that enable
+    integration with external applications.
+    \item Establish a foundation for future multi-modal,
+    multi-language and collaborative-user extensions.
+\end{itemize}
+
+\subsection{Measurable Performance Targets}
+The system aims for the targets in Table~\ref{tab:targets}.
+
+\begin{table}[!t]
+\caption{Measurable performance targets.}
+\label{tab:targets}
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Metric} & \textbf{Target} & \textbf{Method} \\
+\midrule
+Narrative coherence score   & $>$ 85\%  & Discourse analysis \\
+User-preference alignment   & $>$ 80\%  & Likert vs. stated preference \\
+User satisfaction rating    & $>$ 4.0/5 & Post-interaction survey \\
+Context retention accuracy  & $>$ 90\%  & Cross-segment consistency \\
+Response latency (cloud)    & $<$ 5\,s  & End-to-end timing \\
+Session completion rate     & $>$ 75\%  & Sessions completed/started \\
+Image generation success    & $>$ 95\%  & Successful first or retry \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Scope of the Work}
+To ensure focused and achievable outcomes, the following scope
+boundaries are established:
+
+\begin{itemize}
+    \item \textbf{Text-first focus.} The system focuses on
+    text-based narratives augmented with illustration, narration and
+    ambient music; multi-modal generation of video is deferred to
+    future work.
+    \item \textbf{English language.} Initial development targets
+    English-language generation; multi-language support is a
+    secondary objective.
+    \item \textbf{Fiction genres.} The system targets eight fictional
+    narrative genres (fantasy, sci-fi, mystery, romance, thriller,
+    adventure, horror, comedy).
+    \item \textbf{Individual users.} The current scope addresses
+    single-user interactions; multi-user collaborative storytelling
+    is future work.
+    \item \textbf{Short to medium length.} Target story lengths range
+    from flash fiction (500 words) to short stories (5000 words),
+    typically two to six chapters.
+\end{itemize}
+
+\section{Significance of the Study}
+This work matters because it (i) introduces a deployable architectural
+pattern --- the \texttt{custom\_elements} context channel --- that
+generalises beyond storytelling to any LLM-driven application
+requiring end-user-extensible personalisation; (ii) demonstrates that
+free, hot-linked image and audio services can be combined into a
+fluid multimodal experience when paced through a serial-throttling
+queue; and (iii) provides a reproducible open-source codebase that
+will serve as a baseline for future research on interactive narrative
+generation.

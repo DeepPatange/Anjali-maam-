@@ -1,0 +1,365 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+\usepackage{titlesec}
+\usepackage[colorlinks=true,linkcolor=black,urlcolor=blue]{hyperref}
+
+\definecolor{good}{HTML}{1B7F3B}
+\definecolor{warn}{HTML}{B25000}
+\definecolor{bad}{HTML}{A31515}
+\definecolor{rule}{HTML}{444444}
+
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.6em}{}
+\setlist{nosep,leftmargin=1.4em}
+
+\newtcolorbox{verdict}[1]{colback=#1!6,colframe=#1!70!black,
+  boxrule=0.7pt,arc=2pt,left=8pt,right=8pt,top=6pt,bottom=6pt}
+
+% wrapping find/replace rows
+\newcommand{\cb}[2]{%
+  \par\vspace{2.5pt}\noindent
+  \begin{tabular}{@{}p{2.6em}@{}p{0.85\linewidth}@{}}
+  {\footnotesize\scshape #1} & {\footnotesize\ttfamily\raggedright #2}
+  \end{tabular}\par}
+\emergencystretch=3em
+\sloppy
+
+\begin{document}
+
+\begin{center}
+{\Large\bfseries Integrity Report Review}\\[4pt]
+{\normalsize Q\&A-Driven Interactive Storytelling Using Large Language Models:\\
+A Multimodal Framework for Personalised Narrative Generation}\\[6pt]
+{\small Anjali Madan Jha (124MTCM1008) \quad$\cdot$\quad Guide: Dr.\ Vidyullata Devmane\\
+Department of Computer Engineering, Shah \& Anchor Kutchhi Engineering College}\\[6pt]
+{\footnotesize Analysed file: \texttt{final paper.pdf} (10 pp., pdfTeX-1.40.29, compiled 27 June 2026)\\
+Review date: 18 August 2026}
+\end{center}
+
+\vspace{4pt}
+\hrule height 0.8pt
+\vspace{10pt}
+
+\section*{Summary}
+\addcontentsline{toc}{section}{Summary}
+
+Two flags were raised on this paper. They have different answers, and it matters
+that they are not treated the same way.
+
+\begin{verdict}{good}
+\textbf{Flag 1: Hidden text \quad$\rightarrow$\quad FALSE POSITIVE.}
+The 489 white characters are labels printed inside coloured boxes in three
+diagrams. Every one of the 60 white text spans sits on a dark filled rectangle
+and is plainly legible in the rendered PDF. Nothing is concealed. This flag can
+be contested with the evidence in Section 1.
+\end{verdict}
+
+\vspace{6pt}
+
+\begin{verdict}{warn}
+\textbf{Flag 2: AI writing \quad$\rightarrow$\quad PARTLY REAL.}
+Some of this is an artefact of the genre, because methods and results prose is
+uniform by nature and detectors score that heavily. But there is a genuine,
+repeated stylistic habit in the text, and it is worth fixing. Eight specific
+edits are given in Section 3.
+\end{verdict}
+
+\vspace{6pt}
+
+\begin{verdict}{bad}
+\textbf{Also found, unrelated to either flag: a factual contradiction.}
+Section V.J reports ablation numbers that contradict Table V and Section V.F.
+This is more damaging than either integrity flag because an examiner comparing
+the two will catch it. See Section 4.
+\end{verdict}
+
+\section{The hidden-text flag is a false positive}
+
+\subsection*{Where the white text is}
+
+All of it is confined to three figures on three consecutive pages. Pages 1--3
+and 7--10 contain no white text at all.
+
+\begin{center}
+\begin{tabular}{@{}llrr@{}}
+\toprule
+\textbf{Page} & \textbf{Figure} & \textbf{Spans} & \textbf{Chars} \\
+\midrule
+4 & Fig.\ 2, Four-layer system architecture & 28 & 293 \\
+5 & Fig.\ 6, Image synthesis pipeline       & 14 & 77 \\
+6 & Fig.\ 7, Multimodal audio signal flows  & 18 & 119 \\
+\midrule
+\multicolumn{2}{@{}l}{\textbf{Total}} & \textbf{60} & \textbf{489} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent
+The report cites 458 characters; the direct count is 489 across the same three
+pages. The small difference is a counting convention, most likely the em dashes
+and the \texttt{<img>} angle brackets.
+
+\subsection*{Why it is not concealment}
+
+Each white span was tested against the vector fill shapes beneath it.
+\textbf{All 60 of 60 sit on a dark filled box.} Representative fill colours
+recovered from the page: RGB(43,\,43,\,43) charcoal, RGB(86,\,0,\,169) purple,
+RGB(103,\,26,\,178) violet, RGB(64,\,64,\,191) indigo. White is the only
+readable text colour on those fills.
+
+The figures below are rendered directly from the flagged pages at 4$\times$
+magnification. The text the report calls hidden is the text you can read here.
+
+\begin{center}
+\includegraphics[width=0.92\linewidth]{p4_fig2_arch.png}\\
+{\footnotesize Page 4, Fig.\ 2. All 28 flagged spans on this page are these box labels.}
+\end{center}
+
+\vspace{4pt}
+
+\begin{center}
+\includegraphics[width=0.92\linewidth]{p6_fig7_audio.png}\\
+{\footnotesize Page 6, Fig.\ 7. All 18 flagged spans on this page are these box labels.}
+\end{center}
+
+\subsection*{Checks for genuine concealment: all negative}
+
+The four techniques actually used to hide text in a PDF were each tested
+across all ten pages.
+
+\begin{center}
+\begin{tabular}{@{}lc@{}}
+\toprule
+\textbf{Concealment technique} & \textbf{Instances found} \\
+\midrule
+Invisible text render mode (\texttt{3 Tr} / \texttt{7 Tr} operators) & 0 \\
+Sub-legible font size ($<$ 4\,pt)                                    & 0 \\
+Text positioned outside the visible page rectangle                   & 0 \\
+Text covered by an opaque image                                      & 0 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection*{Complete colour census}
+
+Every text character in the document, grouped by colour. There is no fourth
+category and no white body paragraph.
+
+\begin{center}
+\begin{tabular}{@{}lrl@{}}
+\toprule
+\textbf{Colour} & \textbf{Chars} & \textbf{What it is} \\
+\midrule
+RGB(0,\,0,\,0)       & 42{,}669 & Body text, captions, tables \\
+RGB(255,\,255,\,255) & 489      & Diagram box labels (Figs.\ 2, 6, 7) \\
+RGB(133,\,133,\,133) & 26       & Figure annotation (``Modular Core'') \\
+RGB(115,\,115,\,115) & 8        & Figure annotation \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent
+There is no keyword stuffing, no inflated word count, and no text that is
+invisible to a reader but visible to a similarity checker.
+
+\subsection*{Recommended response}
+
+Contest the flag. One sentence is enough: \emph{the white characters are labels
+inside coloured boxes in Figures 2, 6 and 7, and they are visible in the
+rendered PDF.} Point the reviewer at those three figures. Nothing in the paper
+needs to change.
+
+If the committee requires the flag cleared regardless, compile each of the three
+diagrams as a standalone PDF and convert its text to vector outlines
+(\texttt{gs -o fig-flat.pdf -dNoOutputFonts -sDEVICE=pdfwrite fig.pdf}), then
+include the flattened file. This removes the text layer. It is worth noting this
+makes the figures slightly worse for screen readers in order to satisfy a
+detector that has misread them.
+
+\section{The AI-writing flag}
+
+\subsection*{What is genre artefact}
+
+The flagged region is Sections IV.E through V.F: endpoint names, table
+pointers, percentages. This prose is uniform and low-entropy by nature, which
+is what AI detectors measure. Constructions such as ``Three evaluation axes were
+used'' or ``Table IV reports mean latencies'' are correct IEEE register. Passive
+voice and formulaic figure pointers are how methods sections are written, and no
+rewrite makes them read as less mechanical to a classifier. These tools have
+well-documented false-positive rates on exactly this genre.
+
+\subsection*{What is genuinely worth fixing}
+
+The following patterns are real and repeat throughout the paper, not only in the
+flagged region.
+
+\begin{center}
+\begin{tabular}{@{}lcl@{}}
+\toprule
+\textbf{Pattern} & \textbf{Count} & \textbf{Assessment} \\
+\midrule
+Participial clause-tails (\texttt{, confirming\ldots}) & 13 & Dominant tell \\
+Em dashes                                              & 20 & Secondary \\
+Evaluative filler in results sections                  & 4  & Editorialising \\
+Caption text duplicating body text                     & Figs.\ 9, 10 & Also a reviewer complaint \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent
+The strongest signal is clustering: Sections V.D, V.E and V.F each close on a
+participial tail (\emph{confirming\ldots}, \emph{indicating\ldots},
+\emph{confirming\ldots}). Three in a row across consecutive subsections is what
+reads as machine-generated. Removing them is the single highest-value change.
+
+\section{Eight edits}
+
+Facts and figures are unchanged. Register stays formal, because plain and
+neutral is the correct human voice for an IEEE paper. These apply directly in
+the Overleaf editor.
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+\item \textbf{Section V.D}
+\cb{find}{, confirming Q\&A elicitation as the core value driver}
+\cb{repl}{. Both derive directly from the Q\&A step}
+
+\item \textbf{Section V.E}
+\cb{find}{, indicating a need for improved discoverability cues}
+\cb{repl}{. Both sit behind a secondary tab, which is the most likely explanation}
+
+\item \textbf{Section V.F}
+\cb{find}{, confirming that deeper Q\&A elicitation adds measurable value}
+\cb{repl}{(delete it; the numbers already make the point)}
+
+\item \textbf{Section IV.E}
+\cb{find}{(enabling session replay)}
+\cb{repl}{, which is what makes session replay possible}
+\cb{find}{(persisting provider and temperature settings)}
+\cb{repl}{, which holds the provider and temperature the user selected}
+
+\item \textbf{Section V.D}
+\cb{find}{disaggregates satisfaction}
+\cb{repl}{breaks satisfaction down}
+
+\item \textbf{Section V.B} (removes the em-dash pair). In the \texttt{.tex}
+      the em dash is typed as three hyphens, shown below as {\ttfamily -}{\ttfamily -}{\ttfamily -}.
+\cb{find}{1.2 s continuation{-}{-}{-}within the 5 s design target{-}{-}{-}with continuation faster}
+\cb{repl}{1.2 s continuation, both inside the 5 s design target. Continuations are faster}
+
+\item \textbf{Section V.J \quad$\cdot$\quad highest priority} (see Section 4)
+\cb{find}{improves personalisation by $\approx$ 0.95 Likert points while coherence stays flat}
+\cb{repl}{improves personalisation by $\approx$1.4 Likert points, with coherence rising more modestly (0.7 points)}
+
+\item \textbf{Captions of Figs.\ 9 and 10.} Rewrite so they describe what the
+      axes show rather than restating their paragraphs. At present the same
+      sentence appears twice on one page. For example:
+\cb{repl}{Fig. 10. Per-feature adoption across 15 user-study sessions. Each bar is the share of sessions in which the feature was used at least once.}
+\end{enumerate}
+
+\section{Priority: Section V.J contradicts Table V}
+
+This is independent of both integrity flags and should be fixed first.
+
+Table V (question-budget ablation) gives these values:
+
+\begin{center}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Budget} & \textbf{Coherence} & \textbf{Creativity} & \textbf{Personalisation} & \textbf{Time} \\
+\midrule
+4 (Quick)     & 3.6 & 3.8 & 3.2 & 45\,s \\
+8 (Balanced)  & 3.9 & 4.1 & 3.8 & 1.5\,m \\
+12 (Detailed) & 4.2 & 4.2 & 4.3 & 2.5\,m \\
+17 (Full)     & 4.3 & 4.1 & 4.6 & 4.6\,m \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent
+\textbf{Section V.F reports this correctly:} personalisation rises
+$\approx$1.4 points (3.2 $\rightarrow$ 4.6) and coherence rises
+3.6 $\rightarrow$ 4.3.
+
+\vspace{4pt}
+\noindent
+\textbf{Section V.J then states:} ``improves personalisation by $\approx$ 0.95
+Likert points while coherence stays flat.''
+
+\vspace{4pt}
+\noindent
+Both halves are wrong against the paper's own table. The personalisation gain is
+1.4, not 0.95. Coherence rises 0.7 points, which is not flat. Correct V.J as
+given in edit 7.
+
+\vspace{6pt}
+\noindent
+\textbf{Secondary observation.} Creativity falls from 4.2 to 4.1 between the
+12-question and 17-question budgets. The text does not mention this, but it
+supports the existing recommendation of 12 questions as the default and is worth
+a clause.
+
+\section{Status of the source files}
+
+The \texttt{.tex} source for the reviewed paper is not on this machine. It
+exists here only as a compiled PDF. Two older copies of the paper source were
+located:
+
+\begin{center}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Check} & \textbf{projects pack copy} & \textbf{Anjali maam/latex} & \textbf{Flagged PDF} \\
+\midrule
+Lines                      & 898 & 909 & --- \\
+Title                      & ``Q\&A-\emph{Based}\ldots'' & ``Q\&A-\emph{Based}\ldots'' & ``Q\&A-\emph{Driven}\ldots'' \\
+\texttt{tikzpicture}       & 0 & 0 & 3 \\
+\texttt{core value driver} & 0 & 0 & present \\
+\texttt{0.95 Likert}       & 0 & 0 & present \\
+CoNoder / Salmaze refs     & 0 & 0 & cited \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent
+Searches covered every \texttt{.tex} and \texttt{.bib} in the home directory,
+plus the interior of every \texttt{.docx}, \texttt{.pptx} and \texttt{.zip} on
+the Desktop. None contain the flagged sentences or references [32]--[42].
+
+The reviewed version therefore adds a rewritten related-work section, three
+TikZ diagrams and a changed title relative to both local copies. To apply these
+edits to the real paper, export the source from Overleaf
+(Menu $\rightarrow$ Download $\rightarrow$ Source).
+
+\vspace{6pt}
+\noindent
+\textbf{Caution.} Do not rebuild from the local copies. Doing so loses the newer
+related-work section and the TikZ figures, and would submit a paper whose title
+differs from the one that was reviewed.
+
+\section{A note on disclosure}
+
+Whether any part of this text was drafted with AI assistance cannot be
+determined from the file, and is not assumed here. If it was, editing the
+stylistic markers does not substitute for whatever disclosure the institution
+requires, and following that policy is the safer course than reducing a detector
+score. If it was not, the eight edits above are ordinary copy-editing that
+improve the paper, and the caption duplication and the Table V contradiction
+were worth catching either way.
+
+\vfill
+\hrule height 0.4pt
+\vspace{4pt}
+{\footnotesize Evidence for Section 1 was produced with PyMuPDF 1.26.5 over
+\texttt{final paper.pdf}: per-span colour extraction, vector fill-shape
+intersection at each span centre, content-stream scan for text render-mode
+operators, and 4$\times$ region rendering. Figure crops are unmodified renders
+of pages 4 and 6.}
+
+\end{document}

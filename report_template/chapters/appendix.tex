@@ -1,0 +1,74 @@
+\begin{appendices}
+\chapter{Sample API Exchange}
+
+A representative request / response captured during the user study.
+This illustrates how a user-added custom question
+(\texttt{custom\_q\_1}) flows through the normal response path into
+the LLM prompt.
+
+\begin{lstlisting}
+POST /api/story/generate
+{
+  "session_id": "a1b2c3d4-...",
+  "responses": {
+    "setting_1":  "A magical fantasy realm",
+    "char_1":     "Elena",
+    "char_2":     "Brave and resourceful",
+    "theme_1":    "Fantasy",
+    "plot_1":     "Person vs. Supernatural",
+    "custom_q_1": "Should the protagonist have an
+                   animal companion? -> Yes, a silver fox"
+  }
+}
+
+HTTP/1.1 200 OK
+{
+  "content":      "In the realm of Aethermoor...",
+  "word_count":   387,
+  "segment_count": 1,
+  "phase":        "introduction",
+  "choices": ["Explore further", "..."]
+}
+\end{lstlisting}
+
+\chapter{Implementation Footprint}
+
+\begin{table}[ht]
+\caption{End-of-project implementation statistics.}
+\centering
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{@{}lr@{}}
+\toprule
+\textbf{Metric}                      & \textbf{Value} \\
+\midrule
+Python LOC                            & $\approx$3{,}800 \\
+JavaScript LOC                        & $\approx$1{,}700 \\
+CSS LOC                               & $\approx$2{,}200 \\
+HTML template LOC                     & $\approx$400 \\
+Backend modules                       & 7 + main.py + config.py + run.py \\
+DB tables                             & 5 \\
+REST endpoints                        & 14 \\
+Q\&A questions                        & 17 across 4 phases \\
+LLM providers                         & 4 (Ollama, Groq, HF, OpenAI) \\
+Image generation                      & Pollinations.ai (free) \\
+TTS                                   & W3C Web Speech Synth \\
+Ambient music                         & SoundHelix (8 genres) \\
+Export formats                        & TXT, Markdown, HTML \\
+Narrative phases                      & 5 (Freytag) \\
+Visualisations                        & 2 D3 (Story Map, Char Graph) \\
+Stories evaluated                     & 50 \\
+User-study participants               & 15 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\chapter{Reproducibility}
+
+All experiments were performed on macOS 14 with Python 3.11.5,
+\texttt{matplotlib} 3.9.4 and \texttt{numpy} 2.0.2. Image-timing
+measurements were collected over a 100\,Mbps residential link;
+replications on slower links should increase the serial-throttle
+constant. The full source code, this dissertation's LaTeX sources,
+the user-study questionnaire and all figure-generation scripts are
+available at \url{https://github.com/DeepPatange/AI-Stroy-Generator}.
+\end{appendices}

@@ -1,0 +1,65 @@
+\chapter{Conclusion and Future Scope}
+\label{ch:conclusion}
+
+\section{Summary of the Study}
+
+This dissertation set out to change how people take part in AI-generated stories, from passive readers to active co-authors. It presented the design, implementation and evaluation of a Q\&A based interactive storytelling system built on large language models. A protocol of 17 questions over four narrative dimensions (setting, character, theme and plot) collects the user's preferences, a seven-module backend turns them into a structured context and phase-specific prompts, and a provider-independent LLM layer generates the story. A five-phase model based on Freytag's pyramid keeps the plot moving from introduction to resolution, and a consistency checker watches for contradictions.
+
+The text is supported by a scene illustration for each segment, generated through Pollinations.ai with a sentence-scoring prompt extractor and a serial request queue, by narration through the Web Speech API, and by ambient music chosen by genre. Readers can explore the story through a Story Map and a Character Relationship Graph. Users can write their own answers and add their own questions, which reach the model through the \texttt{custom\_elements} context channel.
+
+\section{Main Findings}
+
+\begin{itemize}
+    \item Across 50 generated stories and 15 user-study participants, the system achieved mean Likert scores of 4.05 for coherence, 4.12 for creativity, 4.35 for engagement and 3.75 for consistency, with an overall satisfaction of 4.3 out of 5.
+    \item Groq's free LLaMA-3.1-8B service produced the first segment in 1.8\,s on average, much faster than local Ollama (12.4\,s) and faster than paid OpenAI GPT-3.5-turbo (2.6\,s).
+    \item Personalisation rose from 3.2 at 4 questions to 4.6 at 17 questions. A budget of 12 questions gave a personalisation score of 4.3 with under three minutes of answering, and is the recommended default.
+    \item The serial request queue reduced image-generation failures under parallel load from about 70\% to under 2\%.
+    \item Filtering with an extended stop-word list and a two-mention threshold raised the character-extraction $F_1$ score from 0.71 to 0.80 and more than halved the false-positive rate.
+    \item Custom answers (4.5) and image illustration (4.2) were the most valued features, while the meaningfulness of suggested choices (3.9) and tone consistency were the weakest areas.
+\end{itemize}
+
+\section{Contributions to Knowledge}
+
+\begin{enumerate}
+    \item A Q\&A framework for interactive storytelling that personalises stories through a structured conversation over four narrative dimensions with selectable budgets.
+    \item The \texttt{custom\_elements} context channel, a reusable pattern that lets end users add their own questions and have the answers reach the model's prompt without any change to code or schema.
+    \item A sentence-scoring prompt extractor that removes dialogue and inner thoughts before story text is sent to a text-to-image model.
+    \item A serial request queue that makes free, rate-limited image services reliable enough for interactive use.
+    \item An openly labelled co-appearance character graph, as an example of honest reporting for visualisations whose basis is statistical rather than semantic.
+\end{enumerate}
+
+\section{Practical Implications}
+
+The system shows that a complete multimodal storytelling application can be built from free components and run on a single laptop. Educators can use it to create personalised learning stories, game designers can adopt the Q\&A pattern to capture player preferences, therapists can explore it as a narrative tool, and content creators can prototype personalised illustrated stories at almost no cost. The open-source code~\citep{jha2026repo} gives other researchers a working baseline.
+
+\section{Future Scope}
+
+The work can be extended in several directions:
+
+\begin{itemize}
+    \item \textbf{Semantic context extraction} with DistilBERT~\citep{sanh2019distilbert} or zero-shot LLM classification in place of keyword dictionaries.
+    \item \textbf{Semantic consistency checking} using natural-language inference between segments~\citep{williams2018mnli}.
+    \item \textbf{Relationship extraction} for the character graph, so that it shows the kind of relationship and its sentiment, not only co-appearance.
+    \item \textbf{Local image generation} with SDXL~\citep{podell2024sdxl} or FLUX.1~\citep{bfl2024flux} for offline use and consistent character appearance across images.
+    \item \textbf{Neural narration} with models such as XTTS~\citep{casanova2024xtts}, giving each character its own voice.
+    \item \textbf{Mood-based music} that changes with each segment instead of one track per genre.
+    \item \textbf{Multi-user sessions} in which several people answer questions and take turns shaping the story.
+    \item \textbf{Scalable deployment} with Docker containers and Redis-backed sessions.
+    \item \textbf{Automatic evaluation} with measures such as BLEU, chrF, MAUVE and narrative-arc detection~\citep{lin2024evalnarrate}.
+    \item \textbf{Genre-specific fine-tuning} with LoRA adapters trained on open story collections.
+    \item \textbf{Multilingual support}, starting with Hindi and Marathi, to reach more users.
+\end{itemize}
+
+\section{Research Outcomes}
+
+The work carried out in this dissertation has produced the following outcomes:
+
+\begin{itemize}
+    \item A working, open-source Q\&A based interactive storytelling application~\citep{jha2026repo}.
+    \item A research paper, ``Q\&A-Driven Interactive Storytelling Using Large Language Models: A Multimodal Framework for Personalised Narrative Generation'', prepared from this work.
+    \item User-study material, including the questionnaire, the ratings and the scripts used to produce the figures in this report.
+\end{itemize}
+
+\section{Final Thoughts}
+
+Large language models have made high-quality text generation available to every developer, but turning text generation into a good storytelling experience is a design problem as much as a technical one. This dissertation argued that the key is a clear separation between what the system asks the user and what it does with the answers. By making the questions structured but open to extension, the language model replaceable, and the images, narration and music part of one coordinated experience, the system offers storytelling that is easy for first-time users and open to those who want to shape it further.

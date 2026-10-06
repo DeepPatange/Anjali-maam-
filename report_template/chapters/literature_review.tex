@@ -1,0 +1,183 @@
+\chapter{Literature Survey}
+\label{ch:litreview}
+
+\section{Introduction}
+A comprehensive review of existing literature reveals significant
+research activity in AI-powered story generation, spanning traditional
+rule-based approaches to modern deep-learning methods. This chapter
+examines key contributions, identifies methodological trends and
+highlights gaps that motivate the proposed research.
+
+\section{Survey of Existing System}
+
+\subsection{Evolution of Automated Story Generation}
+Automated story generation has evolved through several distinct
+phases. Early systems in the 1970s and 1980s relied on rule-based
+approaches and story grammars that encoded narrative structures
+explicitly. \emph{TALE-SPIN} \cite{meehan1977talespin} and
+\emph{MINSTREL} demonstrated that computers could synthesise coherent
+fables in a closed domain. The author-level goal-driven \emph{UNIVERSE}
+system \cite{lebowitz1985universe} and the engagement-reflection
+\emph{MEXICA} model \cite{perezperez2001mexica} extended these ideas
+but remained constrained by handcrafted rules and narrow domain
+coverage.
+
+The statistical era brought data-driven approaches that learned
+patterns from corpora of existing stories. While these systems showed
+improved flexibility, they struggled with long-range coherence and
+producing genuinely creative content. The neural network revolution
+introduced recurrent architectures (LSTM, GRU) that captured
+sequential dependencies more effectively but still suffered from
+context degradation.
+
+The transformer architecture introduced in 2017
+\cite{vaswani2017attention} fundamentally changed the landscape of
+natural-language generation. Attention mechanisms captured long-range
+dependencies more effectively than recurrent approaches, leading to
+dramatic improvements in generated-text quality. The subsequent
+development of large-scale pretrained models such as
+GPT-2 \cite{radford2019gpt2}, GPT-3 \cite{brown2020gpt3} and
+GPT-4 \cite{openai2023gpt4} demonstrated that language models trained
+on massive datasets could generate remarkably coherent and creative
+narratives.
+
+\subsection{Modern Interactive Story Generation Systems}
+Several commercial and academic systems have explored interactive
+storytelling: \emph{AI Dungeon} \cite{walton2019aidungeon} popularised
+freeform LLM-driven interactive fiction; \emph{Dramatron}
+\cite{mirowski2023dramatron} structures generation hierarchically
+(log-line $\rightarrow$ scenes $\rightarrow$ dialogue) to improve
+coherence; \emph{TaleBrush} \cite{chung2022talebrush} proposes
+sketch-based co-creation. Recent CHI and IUI work
+\cite{liu2023endusers,yuan2022wordcraft} examines mixed-initiative
+authoring, finding that scaffolded interfaces improve novice usability
+even when raw LLM quality is comparable.
+
+\subsection{Multimodal Co-creation}
+Text-to-image diffusion
+\cite{ramesh2022unclip,rombach2022ldm,podell2024sdxl,bfl2024flux}
+now produces high-quality scene art conditioned on natural language.
+Recent work integrates image generation into narrative loops
+\cite{schuhmann2024visualstory,bouhuis2024crossmodal}, demonstrating
+reader-engagement uplift when illustrations are aligned with current
+narrative state. On the audio side, browser-native speech synthesis
+\cite{w3c2024webspeech} and neural TTS \cite{casanova2024xtts} permit
+low-latency narration without paid APIs. Genre-conditioned ambient
+music has been explored in game research \cite{lopezrincon2024music}
+but is less studied for procedural narrative.
+
+\subsection{Summary Table of Key Research}
+Table~\ref{tab:literature} summarises ten representative works in
+the field and identifies the gap each leaves unaddressed with respect
+to interactive Q\&A-driven personalisation.
+
+\begin{table}[!t]
+\caption{Summary of recent literature in AI-driven story generation.}
+\label{tab:literature}
+\centering
+\renewcommand{\arraystretch}{1.15}
+\small
+\begin{tabular}{@{}c c l p{4.8cm} p{2.2cm}@{}}
+\toprule
+\textbf{\#} & \textbf{Yr} & \textbf{Authors} & \textbf{Method} & \textbf{Gap} \\
+\midrule
+1 & 2024 & Farrell et al. \cite{farrell2024narrative}      & GPT heuristic search planner & No Q\&A \\
+2 & 2023 & Huang et al. \cite{huang2023knowledge}          & GPT + knowledge graph        & Limited personalisation \\
+3 & 2023 & Tambwekar et al. \cite{tambwekar2023controllable}& RL-controlled LSTM/LLM       & Not interactive \\
+4 & 2023 & Li et al. \cite{li2023plotguided}               & Prompt-engineered GPT-3      & No Q\&A component \\
+5 & 2022 & Ammanabrolu et al. \cite{ammanabrolu2022hier}   & Hierarchical Transformer     & No Q\&A branching \\
+6 & 2022 & Mao et al. \cite{mao2022character}              & Character-centric Transformer & No Q\&A personalisation \\
+7 & 2024 & Zhang et al. \cite{zhang2024prompt}             & Instruction-tuned LLM        & Single-shot prompts \\
+8 & 2023 & Peng et al. \cite{peng2023dialogue}             & BART dialogue converter      & No structured Q\&A \\
+9 & 2022 & Li et al. \cite{li2022discourse}                & Discourse planner + LLM      & Not personalised \\
+10& 2024 & Wu et al. \cite{wu2024evaluation}               & LLM-based story metrics      & Evaluation only \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Detailed Analysis of Selected Works}
+\textbf{Farrell et al. (2024)} \cite{farrell2024narrative} propose
+using large language models as heuristic guides for narrative
+planning search algorithms. The system combines traditional AI
+planning techniques with LLM-generated suggestions to create coherent
+narrative sequences. While the approach produces well-structured
+stories, it operates entirely without user interaction during the
+generation process, limiting personalisation to initial parameter
+settings.
+
+\textbf{Huang et al. (2023)} \cite{huang2023knowledge} integrate
+external knowledge graphs with GPT-based generation to improve
+factual consistency and world-building in generated narratives. The
+knowledge integration enables stories with richer detail and fewer
+factual contradictions; however, the system treats users as passive
+recipients with no mechanism for capturing user preferences through
+interaction.
+
+\textbf{Tambwekar et al. (2023)} \cite{tambwekar2023controllable}
+introduce reinforcement learning techniques to control stylistic and
+emotional aspects of generated stories. Users can specify desired
+attributes like sentiment, writing style and thematic elements;
+despite these controls, the generation process remains non-interactive
+after initial specification, preventing dynamic adjustment based on
+user feedback during story development.
+
+\section{Limitations of Existing System / Research Gap}
+\label{sec:gap}
+
+\subsection{Gaps in User Interaction Models}
+Farrell et al. (2024) propose LLM-based narrative planning but do
+not support real-time Q\&A interaction, limiting dynamic story
+adaptation based on user input. Huang et al. (2023) integrate
+external knowledge graphs but treat users as passive participants
+with no conversational involvement; they lack iterative feedback
+mechanisms in which user answers influence future story context
+and narrative flow.
+
+\subsection{Gaps in Control and Personalisation}
+Tambwekar et al. (2023) enable control over style and emotion but do
+not allow users to shape the plot through interactive questioning.
+Li et al. (2023) use static prompt-based plot guidance that cannot
+adapt dynamically through user questions or answers, and do not
+support dialogue-based refinement.
+
+\subsection{Gaps in Narrative Structure}
+Ammanabrolu et al. (2022) employ hierarchical neural planning but
+lack user-centric interaction during story generation, following a
+linear narrative structure without Q\&A-driven branching or decision
+points. Existing approaches rely on predefined templates or
+constraints for personalisation rather than live user responses;
+template-based personalisation cannot capture the nuanced preferences
+revealed through conversation.
+
+\subsection{Gaps in Multimodal Augmentation}
+None of the surveyed systems offer integrated illustration, narration
+and ambient-music modalities that are dynamically conditioned on the
+current segment text and detected genre. Existing image-augmented
+storytelling efforts \cite{schuhmann2024visualstory,bouhuis2024crossmodal}
+are research prototypes rather than deployable applications and do
+not address the rate-limit problem of free image APIs.
+
+\subsection{Gaps in End-User Authoring}
+No existing storytelling system permits the user to add
+\emph{entirely new questions} alongside the system's elicitation
+protocol. Custom user-added Q\&A pairs that flow into the LLM prompt
+through a dedicated context channel constitute a novel personalisation
+pattern that this dissertation introduces.
+
+\subsection{Summary of Gap Analysis}
+The identified gaps converge on a central theme: existing systems
+fail to position users as \emph{active co-creators} of narratives.
+While technical capabilities for high-quality text generation exist,
+the frameworks for leveraging these capabilities through meaningful,
+multimodal, end-user-extensible interaction remain underdeveloped.
+This dissertation addresses this fundamental gap with a comprehensive
+Q\&A-based framework that enables genuine human-AI collaboration in
+storytelling.
+
+\section{Summary}
+The literature survey reveals that although the components of
+LLM-based generation, multimodal synthesis and conversational
+interaction exist independently, no system combines all four into a
+single accessible, provider-agnostic platform. The next chapter
+formalises the problem statement, lists the project's objectives and
+defines the work's scope.

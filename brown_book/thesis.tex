@@ -1,0 +1,232 @@
+\documentclass[12pt,a4paper]{report}
+% Preamble packages
+
+\usepackage[dvipsnames]{xcolor} % Package for adding colors
+\usepackage[top=25mm, bottom=22mm, left=30mm, right=25mm] {geometry} % Package for changing page size
+\usepackage{titlesec} % Package for modifying section titles
+\usepackage{graphicx} % Package for inserting images
+\usepackage{amsmath, amsthm, amsfonts, amssymb} % Package for advance mathematical and font fromats
+\usepackage{mathptmx} % Sets font to Times New Roman
+\usepackage{multirow} % Create tabular cells spanning multiple rows
+\usepackage{listings} % Package for styling code listings
+\usepackage{setspace} % Package for line spacing 
+\usepackage[acronym, nomain, section=section]{glossaries}   % Package for making glossaries and acronyms
+\usepackage[nottoc]{tocbibind}  % for adding lists to Table of Contents
+\usepackage{tocloft}    % Package for modifying list of figures
+\usepackage{blindtext}     % Package to generate dummy texts
+\usepackage{enumitem}   % Package to modify items and bullet points
+\usepackage{fancyhdr} % Package for constructing headers and footers
+\usepackage{hyperref} % Package to create hyperlinks within the document
+\usepackage{url}
+\usepackage[utf8]{inputenc}
+
+\usepackage{wrapfig}
+
+\usepackage[square]{natbib}
+
+\usepackage{epstopdf}
+
+\usepackage{booktabs}
+
+% Times font when compiled with XeTeX (e.g. tectonic); pdfLaTeX uses mathptmx above
+\usepackage{iftex}
+\ifXeTeX
+  \usepackage{fontspec}
+  \setmainfont{texgyretermes}[Extension=.otf, UprightFont=*-regular, BoldFont=*-bold, ItalicFont=*-italic, BoldItalicFont=*-bolditalic]
+\fi
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, fit, calc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{array}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,     
+	citecolor=blue, 
+	urlcolor=blue,
+}
+\usepackage{float}
+
+\definecolor{codebg}{HTML}{F5F5F5}
+\lstset{
+  backgroundcolor=\color{codebg},
+  basicstyle=\ttfamily\small\color{black!90},
+  breaklines=true,
+  columns=fullflexible,
+  frame=single,
+  framerule=0pt,
+  framesep=4pt,
+  captionpos=b,
+  aboveskip=6pt, belowskip=6pt,
+}
+\usepackage{cleveref}
+%\usepackage[left=3.5cm,right=2.0cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{lineno}
+\usepackage{comment}
+\usepackage{multicol}
+\usepackage{xcolor}
+\usepackage{rotating}
+\usepackage{bm}
+\usepackage[toc,page]{appendix}
+\usepackage{ragged2e}
+\usepackage{anyfontsize}
+\usepackage{caption}
+\usepackage{longtable}
+\usepackage[english]{babel}
+\usepackage[skip=20pt, indent=0pt]{parskip}    % for indenting the paragraphs
+
+\fancyhf{} % Clear all header and footer fields
+\fancyhead[R]{\nouppercase{\leftmark}}
+\fancyfoot[L]{\branch}
+\fancyfoot[C]{\thepage} % Place the page number at the center of the footer
+
+\renewcommand{\headrulewidth}{1pt} % Add header line
+\renewcommand{\footrulewidth}{1pt} % Add footer line
+%-----------------------------------------------------------------------
+
+
+
+%---------------------------------------------------------------------
+% Custom commands
+\newcommand{\dedicationNamea}{Anjali's Mother}
+\newcommand{\dedicationNameb}{Madan Jha}
+
+% Global definitions
+\def\mytitle{Q\&A Based Interactive Storytelling Using Generative AI} % Put Project Title Here
+\def\myname{Anjali Madan Jha} % Student name
+\def\myrollno{124MTCM1008}
+\def\mydegree{MASTER OF TECHNOLOGY} % Select 
+\def\branch{Computer Engineering} % Put Your Dept. name
+\def\mysupervisor{Dr. Vidyullata Devmane}
+\def\mydep{Department of Computer Engineering}
+\def\mydegreedate{2025-2026}
+
+% Customizing chapters and section titles
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\centering}{\centering\chaptertitlename\ \thechapter}{15pt}{\Huge}
+\titlespacing*{\chapter}{0pt}{20pt}{20pt} % Adjust spacing
+
+\titleformat{\section}
+   {\fontsize{16pt}{16pt}\bfseries}{\thesection}{1em}{}
+\titlespacing*{\section}{0pt}{18pt}{10pt} % Adjust spacing
+
+\titleformat{\subsection}
+   {\fontsize{14pt}{14pt}\bfseries}{\thesubsection}{1em}{}
+\titlespacing*{\subsection}{0pt}{18pt}{10pt} % Adjust spacing
+
+\titleformat{\subsubsection}
+   {\fontsize{12pt}{12pt}\bfseries}{\thesubsubsection}{1em}{}
+\titlespacing*{\subsubsection}{0pt}{18pt}{10pt} % Adjust spacing
+\setcounter{secnumdepth}{2}
+
+  
+% Customizing chapter section in Table of Contents
+\addto\captionsenglish{% Replace "english" with the language you use
+  \renewcommand{\contentsname}%
+    {Table of Contents}%
+}
+
+\setlength{\cftbeforechapskip}{6pt}  % Spaces between two toc titles
+\renewcommand{\cftchapaftersnum}{.}  % Adds a dot after chapter number
+\renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}}  % Dotted lines
+\renewcommand{\cftchapfont}{\bfseries}  % Bold chapter titles
+
+% Customize Table of Contents title format
+\renewcommand{\cfttoctitlefont}{\fontsize{18pt}{18pt}\bfseries}
+\setlength{\cftbeforetoctitleskip}{0pt} % Adjust spacing before TOC title
+\setlength{\cftaftertoctitleskip}{12pt}  % Adjust spacing after TOC title
+
+% Customize List of Figures title format
+\renewcommand{\cftloftitlefont}{\fontsize{18pt}{18pt}\bfseries}
+\setlength{\cftbeforeloftitleskip}{20pt} % Adjust spacing before LOF title
+\setlength{\cftafterloftitleskip}{20pt}  % Adjust spacing after LOF title
+
+% Customize List of Tables title format
+\renewcommand{\cftlottitlefont}{\fontsize{18pt}{18pt}\bfseries}
+\setlength{\cftbeforelottitleskip}{20pt} % Adjust spacing before LOT title
+\setlength{\cftafterlottitleskip}{20pt}  % Adjust spacing after LOT title
+
+\renewcommand{\cftfigpresnum}{Figure\ }
+\setlength{\cftfignumwidth}{5em}
+
+\renewcommand{\cfttabpresnum}{Table\ }
+\setlength{\cfttabnumwidth}{5em}
+
+\setlist[itemize]{noitemsep, topsep=0pt} % Adjust spacing for itemize
+\setlist[enumerate]{noitemsep, topsep=0pt} % Adjust spacing for enumerate
+
+\onehalfspacing     % line spacing sets to 1.5 for every pagraphs
+\setlength{\emergencystretch}{3em} % avoids text running into the right margin with the 14pt body font
+
+
+%\setlength{\parskip}{0.5em} % Adjust the value as needed its the spacing between paragraphs
+
+
+
+\begin{document}
+
+\baselineskip=18pt plus1pt
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+\pagenumbering{roman}
+
+% Temporarily disable parskip for front matter
+\newlength{\savedparskip}
+\setlength{\savedparskip}{\parskip}
+\setlength{\parskip}{0pt}
+
+% Front matter
+\include{./front_matter/title_page}
+\addcontentsline{toc}{section}{Certificate} %CERTIFICATE
+\include{./front_matter/certificate}
+\addcontentsline{toc}{section}{Candidate's Declaration}%CANDIDATE'S DECLARATION
+\include{./front_matter/candidate's_declaration}
+\addcontentsline{toc}{section}{Certificate of Plagiarism Check}
+\include{./front_matter/Certificate_of_Plag_Check}
+%\addcontentsline{toc}{section}{Dedication} % DEDICATION
+%\include{./front_matter/dedication}
+\addcontentsline{toc}{section}{Acknowledgements} %ACKNOWLEDGEMENTS
+\include{./front_matter/acknowledgements}
+\addcontentsline{toc}{section}{Abstract} % ABSTRACT
+\include{./front_matter/Abstract}
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+% Increase font size for main content
+\fontsize{14}{18}\selectfont
+
+% Increase font size for figure captions 
+\captionsetup{font={normalsize, stretch=1.25}}
+
+% Restore parskip for main content
+\setlength{\parskip}{\savedparskip}
+
+% Main material
+\clearpage
+\pagenumbering{arabic}
+\justifying
+\include{./chapters/introduction}
+\include{./chapters/literature_review}
+\include{./chapters/theoretical_work}
+\include{./chapters/results_and_discussions}
+\include{./chapters/conclusions}
+
+% Revert font size to original if needed for other parts
+\fontsize{12}{14.4}\selectfont
+
+% Bibliography
+\bibliographystyle{abbrvnat}
+
+\bibliography{references}
+% \addcontentsline{toc}{chapter}{Bibliography}
+%\printbibliography
+
+\include{./chapters/appendix}
+\end{document}

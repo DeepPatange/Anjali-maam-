@@ -1,0 +1,153 @@
+\chapter{Introduction}
+\label{ch:intro}
+
+\section{Background and Context}
+Question-answer based story generation represents a paradigm shift in
+the field of Generative Artificial Intelligence, transforming how
+narratives are created and consumed. Unlike traditional storytelling
+systems that present users with predetermined content, Q\&A-based
+systems position the user as an \emph{active participant} in the
+creative process. The interaction is no longer a single prompt-response
+exchange but a sustained dialogue from which a story emerges.
+
+The evolution of artificial intelligence has witnessed remarkable
+progress in natural-language understanding and generation. Early
+rule-based systems gave way to statistical models, which were
+subsequently superseded by neural-network approaches. The advent of
+the transformer architecture \cite{vaswani2017attention} and
+attention mechanisms enabled Large Language Models (LLMs) to achieve
+unprecedented performance across language tasks, including creative
+writing and narrative generation
+\cite{brown2020gpt3,openai2023gpt4,touvron2023llama,jiang2023mistral}.
+
+Modern LLMs such as OpenAI's GPT-3/GPT-4 series \cite{openai2023gpt4},
+Google's BERT and T5 \cite{devlin2019bert}, Meta's LLaMA family
+\cite{touvron2023llama}, and BART \cite{lewis2020bart} have demonstrated
+remarkable capabilities in understanding natural-language queries,
+capturing subtle user intent, maintaining contextual coherence across
+extended interactions, and generating text that exhibits creativity,
+emotional depth and stylistic versatility. Trained on vast corpora
+comprising trillions of tokens, these models have internalised
+patterns of human language use that allow them to produce narratives
+often indistinguishable from human-written content in many contexts.
+
+\section{Motivation and Significance}
+The demand for interactive storytelling spans several important
+application domains:
+
+\begin{itemize}
+    \item \textbf{Educational technology} -- adaptive story-based
+    tutorials that respond to learner understanding, style and
+    interest; narrative-based learning consistently improves
+    retention and engagement.
+    \item \textbf{Entertainment and gaming} -- interactive fiction
+    and procedurally adaptive role-playing where the user actively
+    shapes outcomes through choices and responses.
+    \item \textbf{Therapeutic applications} -- narrative therapy,
+    trauma processing and anxiety-management protocols, in which
+    personalised stories scaffold emotional reflection.
+    \item \textbf{Content creation and marketing} -- scalable
+    generation of personalised marketing narratives, children's
+    stories, brand storytelling and creative writing assistance.
+    \item \textbf{Accessibility} -- making creative storytelling
+    accessible to individuals who lack traditional writing skills
+    but possess rich imagination expressible through conversation.
+\end{itemize}
+
+By integrating LLMs with a guided question-answer framework, this
+project aims to enhance user engagement while ensuring story
+coherence, creativity, relevance and emotional resonance. The
+objective is to design a robust, scalable system capable of
+generating high-quality narratives from user-provided responses while
+maintaining consistency across extended interactions.
+
+\section{Scope and Boundaries of the Study}
+This dissertation develops a comprehensive Q\&A-based interactive
+storytelling system using generative AI technologies. The scope
+encompasses:
+
+\begin{itemize}
+    \item Designing structured input mechanisms that capture diverse
+    user preferences across four narrative dimensions (setting,
+    character, theme, plot).
+    \item Implementing sophisticated context-extraction algorithms
+    that identify narrative elements from conversational input.
+    \item Integrating state-of-the-art LLM-based story generation
+    with custom prompt-engineering strategies.
+    \item Developing intuitive output-delivery systems with feedback
+    and continuation mechanisms.
+    \item Augmenting the textual narrative with three orchestrated
+    modalities --- per-segment scene illustration, voice narration
+    and ambient music --- conditioned on detected genre and
+    segment content.
+    \item Surfacing reader-facing analytics through a Story Map and
+    a Character Relationship Graph.
+    \item Providing an end-user authoring layer for custom answers
+    and entirely user-added Q\&A pairs.
+\end{itemize}
+
+The system is designed to be practical for real-world deployment,
+scalable to handle concurrent users, and suitable for adaptation
+across multiple domains.
+
+\section{Research Questions}
+This project addresses several key research questions:
+\begin{itemize}
+    \item How can structured Q\&A interactions effectively capture
+    user preferences for narrative generation, including preferences
+    for genre, tone, character, plot complexity and themes?
+    \item What architectural approaches enable LLMs to maintain
+    narrative coherence and consistency across extended multi-turn
+    interactions while incorporating continuous user input?
+    \item How can context extraction and management be optimised to
+    preserve relevant story elements while allowing natural narrative
+    evolution based on user direction?
+    \item What evaluation metrics effectively measure the quality of
+    interactive storytelling systems across coherence,
+    personalisation, engagement and creativity?
+    \item How can the system balance user agency in directing
+    narratives against the need for coherent, well-structured stories
+    that follow established narrative conventions?
+\end{itemize}
+
+\section{Contributions of this Dissertation}
+The principal contributions of this work are:
+
+\begin{enumerate}
+    \item A \textbf{novel Q\&A framework} for interactive storytelling
+    that enables real-time personalisation through conversational
+    interaction across four canonical narrative dimensions.
+    \item A \textbf{seven-module backend pipeline} that cleanly
+    separates context extraction, prompt engineering and arc control
+    while remaining LLM-provider agnostic.
+    \item A \textbf{multimodal augmentation layer} comprising
+    sentence-scored text-to-image synthesis, Web-Speech-API narration
+    and genre-conditioned ambient music streaming, with a serial
+    throttling queue to prevent rate-limit cascades.
+    \item Two \textbf{D3-based reader analytics} (Story Map branch
+    tree and Character Relationship Graph) with an explicit
+    co-appearance disclaimer.
+    \item An \textbf{end-user authoring layer} that admits free-form
+    custom answers per question and entirely user-added Q\&A pairs,
+    routed through a dedicated \texttt{custom\_elements} context
+    channel into the LLM prompt.
+    \item A reproducible \textbf{evaluation methodology} with
+    quantitative latency, quality and consistency measurements over
+    50 stories and 15 user-study participants.
+\end{enumerate}
+
+\section{Structure of the Report}
+The remainder of this report is organised as follows.
+Chapter~\ref{ch:litreview} surveys related work in symbolic, neural
+and interactive storytelling and crystallises the research gap.
+Chapter~\ref{ch:problem} formalises the problem statement, lists
+objectives and scopes the work.
+Chapter~\ref{ch:schedule} presents the project schedule as a Gantt
+chart spanning August 2025 -- May 2026.
+Chapter~\ref{ch:proposed} describes the proposed system covering
+feasibility study, framework, hardware/software details, design and
+methodology.
+Chapter~\ref{ch:impl} documents implementation details module by
+module with annotated UI snapshots, including the rendered Q\&A
+interface, generated story segments, the Story Map and the Character
+Relationship Graph.

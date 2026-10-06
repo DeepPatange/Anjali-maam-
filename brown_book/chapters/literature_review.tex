@@ -1,0 +1,147 @@
+\chapter{Literature Review}
+\label{ch:litreview}
+
+\section{Introduction}
+
+This chapter reviews earlier work that is relevant to Q\&A based interactive storytelling. It begins with an overview of how automated story generation has developed, and then explains the main theoretical ideas on which the proposed system rests: narrative structure, transformer language models, prompt engineering, text-to-image diffusion and speech synthesis. After that it reviews previous research on controllable, interactive and multimodal story generation, summarises the reviewed work in a table, and identifies the research gaps that this dissertation addresses.
+
+\section{Overview of the Topic}
+
+\subsection{Evolution of Automated Story Generation}
+
+Automated story generation has passed through several stages. The first systems, built in the 1970s and 1980s, were rule based. TALE-SPIN~\citep{meehan1977talespin} produced short animal fables by simulating characters who had goals and planned actions to reach them. UNIVERSE~\citep{lebowitz1985universe} treated story-telling as planning at the level of the author, and MEXICA~\citep{perezperez2001mexica} modelled creative writing as a cycle of engagement and reflection. These systems showed that a computer could produce a coherent plot, but they depended on hand-written knowledge and worked only in narrow domains.
+
+The statistical era brought models that learned from collections of existing stories. They were more flexible but found it hard to stay coherent over long passages. Recurrent neural networks such as LSTMs and GRUs captured sequences better, yet their memory of earlier text faded as a story grew.
+
+The transformer~\citep{vaswani2017attention} replaced recurrence with attention, which lets every word look directly at every other word in the context. Large pretrained models built on it, such as GPT-2~\citep{radford2019gpt2}, GPT-3~\citep{brown2020gpt3} and GPT-4~\citep{openai2023gpt4}, showed that a model trained on enough text could write long, fluent and creative stories. Open models such as LLaMA~\citep{touvron2023llama} and Mistral~\citep{jiang2023mistral} later made this ability available for local use. Surveys of the field~\citep{zhao2023llmsurvey,naveed2024llmsurvey,wang2025narrativesurvey} note that the main open problems have moved from fluency to control, coherence over long texts and meaningful user involvement.
+
+\subsection{Interactive Storytelling}
+
+Interactive storytelling lets the user influence the story while it is being told. Early work on believable agents and story adaptation~\citep{riedl2006believable} used planning to change a story in response to player actions while keeping it coherent. With LLMs, interaction has become much more open. AI Dungeon~\citep{walton2019aidungeon} lets the player type any action and have the model continue the story. Such free-form input gives the user great freedom, but it also puts the whole burden of direction on the user and often leads to stories that drift.
+
+\subsection{Multimodal Storytelling}
+
+Stories are more engaging when text is combined with images and sound. Recent surveys~\citep{jia2024multimodalstory,liu2025coimagining} describe a shift from co-writing towards co-imagining, in which people and AI systems create text, pictures and audio together. This is now practical because good text-to-image and text-to-speech models are freely available.
+
+\section{Theoretical Framework}
+
+\subsection{Narrative Structure}
+
+Classical narratology describes how stories are organised~\citep{bal2017narratology}. One of the most widely used models is Freytag's pyramid~\citep{freytag1900drama}, which divides a plot into five parts: exposition (introduction), rising action, climax, falling action and resolution. The proposed system uses these five parts as phases of a finite-state machine, so that a generated story follows a recognisable dramatic arc instead of wandering.
+
+\subsection{Transformer Language Models}
+
+A transformer maps a sequence of tokens to a sequence of vectors through stacked layers of self-attention and feed-forward networks~\citep{vaswani2017attention}. In self-attention, each token forms a query $Q$, a key $K$ and a value $V$, and the output is
+\begin{equation}
+\mathrm{Attention}(Q,K,V) = \mathrm{softmax}\!\left(\frac{QK^{\top}}{\sqrt{d_k}}\right)V ,
+\end{equation}
+where $d_k$ is the size of the key vectors. Decoder-only models such as GPT and LLaMA generate text one token at a time, each time predicting the next token from all the previous ones. Encoder models such as BERT~\citep{devlin2019bert} and encoder-decoder models such as BART~\citep{lewis2020bart} and T5~\citep{raffel2020t5} are more often used for understanding and transformation tasks. Instruction tuning with human feedback~\citep{ouyang2022rlhf} makes models follow requests closely, which is essential when a system needs the model to respect specific story constraints. The Hugging Face Transformers library~\citep{wolf2020transformers} and local runtimes such as Ollama~\citep{ollama2024} make these models easy to use in applications.
+
+A key practical limit is the \emph{context window}, the maximum number of tokens the model can attend to. Everything the model should remember about the story, including the user's answers and the earlier segments, has to fit inside it. This is why the proposed system keeps a structured summary of the user's preferences and passes only the most recent segments to the model.
+
+\subsection{Prompt Engineering}
+
+A prompt is the text given to a language model to steer its output. Prompt engineering is the practice of designing prompts so that the model produces the desired kind of answer~\citep{liu2023promptsurvey,sahoo2024promptsurvey}. Useful techniques include giving the model a role in a system message, stating constraints explicitly, providing examples (few-shot prompting)~\citep{brown2020gpt3}, writing the prompt as a small program with clear sections~\citep{reynolds2021promptprog}, and asking the model to reason step by step~\citep{wei2022cot}. In the proposed system, each story phase has its own prompt template, and the user's answers are inserted into it as structured fields.
+
+\subsection{Text-to-Image Diffusion}
+
+Diffusion models generate an image by starting from random noise and removing it step by step, guided by a text description. Latent diffusion~\citep{rombach2022ldm} performs this process in a compressed latent space, which makes it fast enough for everyday hardware. Later models such as DALL$\cdot$E~2~\citep{ramesh2022unclip}, DALL$\cdot$E~3~\citep{openai2023dalle3}, SDXL~\citep{podell2024sdxl} and FLUX.1~\citep{bfl2024flux} produce high-quality images from natural-language prompts. Pollinations.ai~\citep{pollinations2024api} provides free access to such models through a simple URL, which the proposed system uses for scene illustrations. The quality of the image depends strongly on the prompt, so choosing a short, visual description from the story text is important.
+
+\subsection{Speech Synthesis and Ambient Music}
+
+Text-to-speech (TTS) converts written text into spoken audio. Browsers provide a built-in TTS engine through the W3C Web Speech API~\citep{w3c2024webspeech}, which needs no server or key. Neural TTS models such as XTTS~\citep{casanova2024xtts} give more natural voices and can imitate a speaker, at a higher computing cost. Background music that matches the mood of a scene is common in games, and procedural music for interactive narratives has been surveyed by L\'opez-Rinc\'on et al.~\citep{lopezrincon2024music}. The proposed system uses royalty-free algorithmic tracks from SoundHelix~\citep{brichta2024soundhelix}, chosen according to the story genre.
+
+\section{Previous Research}
+
+\subsection{Controllable and Planned Story Generation}
+
+Several studies try to give structure or control to LLM-based stories. Farrell et al.~\citep{farrell2024narrative} use an LLM as a heuristic guide for a classical narrative-planning search. The plans are well structured, but the user takes no part once generation starts, so personalisation is limited to the initial settings. Huang et al.~\citep{huang2023knowledge} add an external knowledge graph to a GPT-based generator to improve factual consistency and world-building, but the user is a passive reader with no way to express preferences during the process. Tambwekar et al.~\citep{tambwekar2023controllable} use reinforcement learning to control style and emotion according to constraints given by the user. The control is set at the start and cannot be changed as the story develops.
+
+Li et al.~\citep{li2023plotguided} guide GPT-3 with hierarchical prompts built from a plot outline. Ammanabrolu et al.~\citep{ammanabrolu2022hier} use hierarchical neural planning to give long stories a clear structure. Li et al.~\citep{li2022discourse} add a discourse-aware planner to improve coherence in long-form stories, and Mao et al.~\citep{mao2022character} focus on keeping character personalities consistent. Zhang et al.~\citep{zhang2024prompt} use instruction-tuned LLMs to generate stories from a single detailed prompt. These works improve structure and consistency, but they follow a linear process without Q\&A-driven branching.
+
+\subsection{Interactive and Co-Creative Systems}
+
+Peng et al.~\citep{peng2023dialogue} turn dialogue-based user input into stories with a BART model, which is closer to interactive use, although the dialogue is not structured around story dimensions. Dramatron~\citep{mirowski2023dramatron} builds scripts hierarchically, from a log-line to scenes to dialogue, and improves coherence for long texts. TaleBrush~\citep{chung2022talebrush} lets writers sketch the fortune of a character as a line and have the model follow it. Wordcraft~\citep{yuan2022wordcraft} is an editor in which writers work with an LLM on their own stories. User studies of such tools~\citep{liu2023endusers,yuan2022wordcraft} found that guided, scaffolded interfaces help novice users even when the underlying model is the same, because users often do not know how to phrase what they want.
+
+\subsection{Multimodal Story Generation}
+
+Schuhmann et al.~\citep{schuhmann2024visualstory} combine diffusion models with LLM co-pilots to generate illustrated stories, and Bouhuis et al.~\citep{bouhuis2024crossmodal} study cross-modal coherence between the text and its pictures. Both report higher reader engagement when images match the current state of the story. These are research prototypes, however, and they do not address the practical rate limits of free image services. Music for interactive narratives is mostly studied in games~\citep{lopezrincon2024music,garg2024gan} and rarely combined with generated text.
+
+\subsection{Evaluation of Generated Stories}
+
+Evaluating stories is difficult because there is no single correct output. Wu et al.~\citep{wu2024evaluation} and Lin et al.~\citep{lin2024evalnarrate} propose multi-dimensional evaluation frameworks that combine automatic scores with LLM-based judgement of coherence, creativity and engagement. Human ratings on Likert scales remain the most common reference. The present work follows this practice and combines automatic measurements with a user study.
+
+\subsection{Summary of Reviewed Literature}
+
+Table~\ref{tab:literature} summarises representative works and the gap each leaves with respect to interactive, Q\&A-driven personalisation.
+
+\begin{table}[H]
+\centering
+\caption{Summary of reviewed literature on AI-driven story generation.}
+\label{tab:literature}
+\renewcommand{\arraystretch}{1.2}
+\small
+\begin{tabular}{|c|c|p{4.3cm}|p{4.0cm}|p{3.0cm}|}
+\hline
+\textbf{\#} & \textbf{Year} & \textbf{Authors} & \textbf{Method} & \textbf{Gap} \\
+\hline
+1 & 2024 & Farrell et al.~\citep{farrell2024narrative}       & LLM-guided narrative planning & No user interaction \\
+2 & 2023 & Huang et al.~\citep{huang2023knowledge}           & GPT with knowledge graph      & Limited personalisation \\
+3 & 2023 & Tambwekar et al.~\citep{tambwekar2023controllable} & RL-based style control        & Not interactive \\
+4 & 2023 & Li et al.~\citep{li2023plotguided}                & Hierarchical prompting of GPT-3 & No Q\&A component \\
+5 & 2022 & Ammanabrolu et al.~\citep{ammanabrolu2022hier}    & Hierarchical transformer      & No Q\&A branching \\
+6 & 2022 & Mao et al.~\citep{mao2022character}               & Character-centric transformer & No Q\&A personalisation \\
+7 & 2024 & Zhang et al.~\citep{zhang2024prompt}              & Instruction-tuned LLM         & Single-shot prompt \\
+8 & 2023 & Peng et al.~\citep{peng2023dialogue}              & BART dialogue-to-story        & No structured Q\&A \\
+9 & 2022 & Li et al.~\citep{li2022discourse}                 & Discourse planner with LLM    & Not personalised \\
+10 & 2024 & Wu et al.~\citep{wu2024evaluation}               & LLM-based story metrics       & Evaluation only \\
+11 & 2023 & Mirowski et al.~\citep{mirowski2023dramatron}    & Hierarchical script writing   & No multimodal output \\
+12 & 2024 & Schuhmann et al.~\citep{schuhmann2024visualstory} & Diffusion with LLM co-pilot   & Prototype, no Q\&A \\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Research Gaps}
+\label{sec:gap}
+
+The review shows the following gaps:
+
+\begin{enumerate}
+    \item \textbf{No structured Q\&A interaction.} Planning-based and knowledge-based systems~\citep{farrell2024narrative,huang2023knowledge} do not collect preferences through a real-time dialogue, and user answers do not shape later parts of the story.
+    \item \textbf{Control fixed at the start.} Controllable systems~\citep{tambwekar2023controllable,li2023plotguided} let the user set style or plot only once, with no refinement as the story develops.
+    \item \textbf{Linear structure.} Hierarchical approaches~\citep{ammanabrolu2022hier} improve structure but follow a linear path without user decision points. Personalisation, where present, depends on templates rather than live answers.
+    \item \textbf{No integrated multimodal output.} None of the reviewed systems combines illustration, narration and ambient music driven by the current segment and genre in a deployable application, and none deals with the rate limits of free image services.
+    \item \textbf{No end-user authoring of questions.} No existing system lets the user add entirely new questions next to the system's own questions and have them influence the story.
+\end{enumerate}
+
+Table~\ref{tab:gap} compares the proposed system with three well-known tools on these features.
+
+\begin{table}[H]
+\centering
+\caption{Feature-level gap analysis against representative systems.}
+\label{tab:gap}
+\renewcommand{\arraystretch}{1.2}
+\small
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Feature} & \textbf{Proposed} & \textbf{AI Dungeon} & \textbf{Dramatron} & \textbf{NovelAI} \\
+\hline
+User input           & Structured Q\&A & Free-form & Hierarchical & Free-form \\
+Structure management & 5-phase         & None      & Scene-based  & Limited \\
+Consistency checking & Active          & None      & Log-line     & Memory \\
+LLM providers        & 4 (free + paid) & OpenAI    & PaLM         & Custom \\
+Local deployment     & Yes             & No        & No           & No \\
+Image synthesis      & Yes             & No        & No           & Partial \\
+TTS narration        & Yes             & No        & No           & No \\
+Ambient music        & Genre-based     & No        & No           & No \\
+Custom questions     & Yes             & No        & No           & No \\
+Open source          & Yes             & Partial   & Yes          & No \\
+\hline
+\end{tabular}
+\end{table}
+
+Taken together, these gaps point to one central issue: existing systems do not treat the user as an active co-creator. The ability to generate good text exists, but a framework that uses it through meaningful, multimodal and user-extensible interaction is still missing.
+
+\section{Summary}
+
+This chapter traced automated story generation from rule-based systems to large language models, explained the theory behind the components used in this work, and reviewed recent research on controllable, interactive and multimodal storytelling. The components needed for the proposed system (LLM generation, conversational interaction, image and speech synthesis) exist separately, but no reviewed system brings them together in one accessible, provider-independent platform. The next chapter describes the design of such a system.
