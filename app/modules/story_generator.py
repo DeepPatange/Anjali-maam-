@@ -95,10 +95,11 @@ class OllamaClient(BaseLLMClient):
                         "options": {
                             "temperature": self.config.temperature,
                             "top_p": self.config.top_p,
-                            "num_predict": self.config.max_tokens
+                            "num_predict": self.config.max_tokens,
+                            "num_ctx": 4096
                         }
                     },
-                    timeout=120.0
+                    timeout=300.0
                 )
 
                 if response.status_code == 200:
@@ -125,10 +126,11 @@ class OllamaClient(BaseLLMClient):
                         "options": {
                             "temperature": self.config.temperature,
                             "top_p": self.config.top_p,
-                            "num_predict": self.config.max_tokens
+                            "num_predict": self.config.max_tokens,
+                            "num_ctx": 4096
                         }
                     },
-                    timeout=120.0
+                    timeout=300.0
                 ) as response:
                     async for line in response.aiter_lines():
                         if line:
@@ -543,6 +545,7 @@ class StoryGenerator:
             line = line.strip()
             if line and (line[0].isdigit() or line.startswith("-")):
                 choice = line.lstrip("0123456789.-) ").strip()
+                choice = choice.replace("**", "").replace("__", "").strip()
                 if choice and len(choice) > 5:
                     choices.append(choice)
 

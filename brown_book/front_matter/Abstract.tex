@@ -1,24 +1,15 @@
 \thispagestyle{empty}
 
 \begin{center}
-{\Large {\bf \uppercase{ABSTRACT}}}
+{\Large {\bf \uppercase{Abstract}}}
 \end{center}
 
 \vspace{\baselineskip}
 \hrule
 \vspace{2\baselineskip}
 
-\begingroup
-\setlength{\parskip}{10pt}
-Large Language Models (LLMs) such as GPT-4, LLaMA and Mistral can now write fluent and creative stories, but most story tools still work in a single step: the user types one prompt and receives one finished story. The user has to state every preference at the start, and has little say in how the story develops. This makes the output generic and leaves the reader as a passive consumer.
-
-This dissertation presents a question-and-answer (Q\&A) based interactive storytelling system in which the user and the model build the story together. A structured protocol of 17 questions, grouped into four narrative dimensions (setting, character, theme and plot), collects the user's preferences. The user can choose a budget of 4, 8, 12 or 17 questions, write a custom answer to any question, and add new questions of their own. The answers pass through a seven-module backend: User Input Acquisition, Context Extraction, Knowledge and Memory, Prompt Engineering, LLM-based Story Generation, Story Flow and Consistency Management, and Output Formatting. A five-phase story-flow model based on Freytag's pyramid keeps the plot moving from introduction to resolution. The backend is built with FastAPI and SQLite and works with local (Ollama) and cloud (Groq, Hugging Face, OpenAI) language models, which can be switched at run time.
-
-The text is supported by three further modes. A scene illustration is generated for each segment through the Pollinations.ai diffusion service, using a sentence-scoring prompt extractor and a serial request queue that avoids rate-limit failures. Narration is produced with the W3C Web Speech Synthesis interface, and genre-matched ambient music is streamed with cross-fades. Readers can explore the story through a D3-based Story Map and a Character Relationship Graph built from co-appearance counts.
-
-The system was evaluated on 50 generated stories and a user study with 15 participants. It obtained mean Likert scores of 4.05/5 for coherence, 4.12/5 for creativity, 4.35/5 for engagement and 3.75/5 for consistency, with an overall satisfaction of 4.3/5. Groq LLaMA-3.1-8B produced the first story segment in 1.8\,s on average. The serial queue cut image-generation failures under parallel load from about 70\% to under 2\%, and filtering raised the character-detection $F_1$ score from 0.71 to 0.80. A budget of 12 questions gave the best balance between personalisation and the time spent answering.
+Most story generators built on large language models take a single prompt and return a finished story, so the user must describe everything at the start and has little control afterwards. This dissertation presents an interactive storytelling system in which the story is built from the user's answers to a short set of questions on setting, character, theme and plot, and is then continued chapter by chapter in the direction the user chooses. The language model is Llama 3.2 3B, fine-tuned with QLoRA on 3,321 prompt and story pairs prepared from 1,000 public stories in the same format that the system uses, and it runs on an ordinary laptop without any external service. On 191 test samples from 49 stories that were not used in training, fine-tuning lowered the loss from 1.521 to 1.194 and the perplexity from 4.58 to 3.30 ($p < 0.001$). On 69 test prompts the fine-tuned model always returned only the story text, against 75\% for the original model, at the same speed of about 37 tokens per second, although its chapters were shorter than requested. An earlier user study of the system with 15 participants, carried out with a pretrained Llama model before fine-tuning, gave mean ratings of 4.05 for coherence, 4.12 for creativity, 4.35 for engagement and 3.75 for consistency on a five-point scale.
 
 \vspace{2\baselineskip}
-\endgroup
-\textit{Keywords: Generative AI, Large Language Models, interactive storytelling, question answering, narrative generation, prompt engineering, text-to-image synthesis, text-to-speech, human--AI collaboration, FastAPI}
+\textit{Keywords: Generative AI, Large Language Models, Llama, Fine-Tuning, LoRA, Interactive Storytelling, Question Answering, Local Inference.}
 \newpage

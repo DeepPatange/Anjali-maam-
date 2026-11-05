@@ -1,0 +1,231 @@
+{
+ "n_prompts": 69,
+ "tolerance": 0.25,
+ "targets": {
+  "init": [
+   300,
+   400
+  ],
+  "continuation": [
+   250,
+   350
+  ]
+ },
+ "by_kind": {
+  "init": {
+   "base": {
+    "n": 49,
+    "words_mean": 357.3,
+    "words_median": 359,
+    "words_min": 303,
+    "words_max": 418,
+    "length_ok_pct": 100,
+    "story_text_only_pct": 69.4,
+    "names_protagonist_pct": 95.0,
+    "names_protagonist_n": 40,
+    "complete_ending_pct": 98.0,
+    "distinct2_mean": 0.95,
+    "output_tokens_mean": 458.4,
+    "tokens_per_s_mean": 38.1,
+    "seconds_mean": 13.1,
+    "seconds_median": 13.3,
+    "seconds_max": 14.8,
+    "hit_token_limit": 0
+   },
+   "finetuned": {
+    "n": 49,
+    "words_mean": 281.4,
+    "words_median": 284,
+    "words_min": 137,
+    "words_max": 366,
+    "length_ok_pct": 87.8,
+    "story_text_only_pct": 100,
+    "names_protagonist_pct": 87.5,
+    "names_protagonist_n": 40,
+    "complete_ending_pct": 100,
+    "distinct2_mean": 0.951,
+    "output_tokens_mean": 342.3,
+    "tokens_per_s_mean": 38.1,
+    "seconds_mean": 9.9,
+    "seconds_median": 9.9,
+    "seconds_max": 12.6,
+    "hit_token_limit": 0
+   }
+  },
+  "continuation": {
+   "base": {
+    "n": 20,
+    "words_mean": 311.9,
+    "words_median": 301.5,
+    "words_min": 268,
+    "words_max": 375,
+    "length_ok_pct": 100,
+    "story_text_only_pct": 90.0,
+    "names_protagonist_pct": 100,
+    "names_protagonist_n": 20,
+    "complete_ending_pct": 100,
+    "distinct2_mean": 0.943,
+    "output_tokens_mean": 400.4,
+    "tokens_per_s_mean": 37.8,
+    "seconds_mean": 12.4,
+    "seconds_median": 11.9,
+    "seconds_max": 14.4,
+    "hit_token_limit": 0
+   },
+   "finetuned": {
+    "n": 20,
+    "words_mean": 259.9,
+    "words_median": 258.0,
+    "words_min": 181,
+    "words_max": 328,
+    "length_ok_pct": 95.0,
+    "story_text_only_pct": 100,
+    "names_protagonist_pct": 90.0,
+    "names_protagonist_n": 20,
+    "complete_ending_pct": 95.0,
+    "distinct2_mean": 0.939,
+    "output_tokens_mean": 315.8,
+    "tokens_per_s_mean": 35.3,
+    "seconds_mean": 10.7,
+    "seconds_median": 10.5,
+    "seconds_max": 13.7,
+    "hit_token_limit": 0
+   }
+  },
+  "all": {
+   "base": {
+    "n": 69,
+    "words_mean": 344.1,
+    "words_median": 346,
+    "words_min": 268,
+    "words_max": 418,
+    "length_ok_pct": 100,
+    "story_text_only_pct": 75.4,
+    "names_protagonist_pct": 96.7,
+    "names_protagonist_n": 60,
+    "complete_ending_pct": 98.6,
+    "distinct2_mean": 0.948,
+    "output_tokens_mean": 441.6,
+    "tokens_per_s_mean": 38.0,
+    "seconds_mean": 12.9,
+    "seconds_median": 13.1,
+    "seconds_max": 14.8,
+    "hit_token_limit": 0
+   },
+   "finetuned": {
+    "n": 69,
+    "words_mean": 275.2,
+    "words_median": 276,
+    "words_min": 137,
+    "words_max": 366,
+    "length_ok_pct": 89.9,
+    "story_text_only_pct": 100,
+    "names_protagonist_pct": 88.3,
+    "names_protagonist_n": 60,
+    "complete_ending_pct": 98.6,
+    "distinct2_mean": 0.948,
+    "output_tokens_mean": 334.6,
+    "tokens_per_s_mean": 37.3,
+    "seconds_mean": 10.2,
+    "seconds_median": 10.1,
+    "seconds_max": 13.7,
+    "hit_token_limit": 0
+   }
+  }
+ },
+ "paired": {
+  "init": {
+   "length_ok": {
+    "base_only": 6,
+    "finetuned_only": 0,
+    "p": 0.03125
+   },
+   "story_text_only": {
+    "base_only": 0,
+    "finetuned_only": 15,
+    "p": 6.103515625e-05
+   },
+   "names_protagonist": {
+    "base_only": 4,
+    "finetuned_only": 1,
+    "p": 0.375
+   },
+   "complete_ending": {
+    "base_only": 0,
+    "finetuned_only": 1,
+    "p": 1.0
+   },
+   "words": {
+    "p": 2.9616831872408464e-09
+   },
+   "distinct2": {
+    "p": 0.4011373299120997
+   },
+   "seconds": {
+    "p": 1.1090503847150325e-09
+   }
+  },
+  "continuation": {
+   "length_ok": {
+    "base_only": 1,
+    "finetuned_only": 0,
+    "p": 1.0
+   },
+   "story_text_only": {
+    "base_only": 0,
+    "finetuned_only": 2,
+    "p": 0.5
+   },
+   "names_protagonist": {
+    "base_only": 2,
+    "finetuned_only": 0,
+    "p": 0.5
+   },
+   "complete_ending": {
+    "base_only": 1,
+    "finetuned_only": 0,
+    "p": 1.0
+   },
+   "words": {
+    "p": 0.0001887680428950374
+   },
+   "distinct2": {
+    "p": 0.24548721313476562
+   },
+   "seconds": {
+    "p": 0.000209808349609375
+   }
+  },
+  "all": {
+   "length_ok": {
+    "base_only": 7,
+    "finetuned_only": 0,
+    "p": 0.015625
+   },
+   "story_text_only": {
+    "base_only": 0,
+    "finetuned_only": 17,
+    "p": 1.52587890625e-05
+   },
+   "names_protagonist": {
+    "base_only": 6,
+    "finetuned_only": 1,
+    "p": 0.125
+   },
+   "complete_ending": {
+    "base_only": 1,
+    "finetuned_only": 1,
+    "p": 1.0
+   },
+   "words": {
+    "p": 2.7002527030615686e-12
+   },
+   "distinct2": {
+    "p": 0.836577161309442
+   },
+   "seconds": {
+    "p": 1.6153927221945535e-12
+   }
+  }
+ }
+}

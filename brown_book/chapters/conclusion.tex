@@ -1,0 +1,29 @@
+\chapter{Conclusion}
+\label{ch:conclusion}
+
+\section{Conclusions}
+\label{sec:con-conclusions}
+
+This dissertation set out to build a storytelling system in which the user shapes the story by answering questions and choosing directions, using a language model trained for the task and running on the user's own machine. The following conclusions can be drawn from the work.
+
+A short structured questionnaire is a practical way to collect story preferences. Seventeen questions on setting, character, theme and plot, with a choice of 4, 8, 12 or 17 questions, were enough to produce openings that follow the user's answers, and user-added questions reached the story through the \texttt{custom\_elements} channel without any change to the code. In the phase-1 user study personalisation rose from 3.2 to 4.6 out of 5 as the number of questions increased, and 12 questions gave the best balance between personalisation and answering time.
+
+A small open model can be fine-tuned for this task on a laptop. Training 2.62 million of the 3.21 billion parameters of Llama 3.2 3B for about one hour reduced the loss on unseen stories from 1.521 to 1.194 and the perplexity from 4.58 to 3.30; the loss fell for every test sample and every test story, and the difference is statistically significant ($p < 0.001$).
+
+Fine-tuning changed the form of the output more than its length. The fine-tuned model always returned only the story text, whereas the original model added a title or a comment in a quarter of the cases, but its chapters were shorter than the prompt asked for (275 against 344 words on average) because the training segments were short. Generation speed stayed the same, at about 37 tokens per second, and a full turn with the four suggested directions took 22 to 28 seconds without a network connection.
+
+The text, narration and music parts of the system run locally, but the scene illustrations depend on an online image service, which started to require payment during this work. A local image model is therefore needed before the whole system can run offline.
+
+\section{Contributions to Knowledge}
+\label{sec:con-contributions}
+
+\begin{enumerate}
+    \item A method for building fine-tuning data for a prompt-driven application: public texts are labelled with the application's own questions and passed through the application's own prompt code, so that training and use share one format.
+    \item A fine-tuned Llama 3.2 3B story model that runs locally, with a held-out comparison against the pretrained model using paired statistical tests, and a procedure for converting the trained adapter to the local runtime.
+    \item The \texttt{custom\_elements} context channel, which passes user-added questions and answers to the model without any change to code or schema, and which was shown to work in a generated story.
+\end{enumerate}
+
+\section{Practical Implications}
+\label{sec:con-implications}
+
+The language model of the system was trained and runs on a single ordinary laptop, using open components. For educators, this means personalised learning stories without sending pupils' answers to an outside service and without a cost per story. For game designers and content creators, the Q\&A pattern is a way to collect rich preferences while keeping narrative control, and the fine-tuning procedure shows how to adapt a small open model to the house style of a product. For researchers and students, the open-source code, the dataset builder and the evaluation scripts~\cite{jha2026repo} form a baseline that can be reproduced in about two hours on consumer hardware, and the adapter can be retrained on other story collections or other languages with the same scripts.

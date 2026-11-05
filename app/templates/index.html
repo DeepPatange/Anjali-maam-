@@ -253,27 +253,15 @@
         </div>
         <div class="settings-content">
             <div class="setting-group">
-                <label class="setting-label">AI Provider</label>
-                <select class="setting-select" id="llmProvider" onchange="updateProviderHelp()">
-                    <option value="ollama" selected>&#x1F5A5;&#xFE0F; Ollama (Local - No API)</option>
-                    <option value="groq">&#x26A1; Groq (FREE &amp; Fast!)</option>
-                    <option value="huggingface">&#x1F917; Hugging Face (FREE)</option>
-                    <option value="openai">&#x1F4B0; OpenAI (Paid)</option>
+                <label class="setting-label">AI Model</label>
+                <input type="hidden" id="llmProvider" value="ollama">
+                <select class="setting-select" id="modelName">
+                    <option value="storyforge" selected>Llama 3.2 &ndash; fine-tuned for storytelling</option>
+                    <option value="llama3.2:3b">Llama 3.2 &ndash; pretrained base</option>
                 </select>
                 <div class="provider-help" id="providerHelp">
-                    Run locally with Ollama - no internet needed
+                    Llama 3.2 runs locally on this computer.
                 </div>
-            </div>
-
-            <div class="setting-group">
-                <label class="setting-label">Model Name</label>
-                <select class="setting-select" id="modelName">
-                    <option value="llama3.2">Llama 3.2 (Ollama)</option>
-                    <option value="mistral">Mistral 7B</option>
-                    <option value="llama3-8b">Llama 3 8B (Groq)</option>
-                    <option value="mixtral">Mixtral 8x7B (Groq)</option>
-                    <option value="zephyr">Zephyr 7B (HuggingFace)</option>
-                </select>
             </div>
 
             <div class="setting-group">
@@ -289,15 +277,6 @@
                 <label class="setting-label">Max Story Length</label>
                 <input type="number" class="setting-input" id="maxTokens"
                     value="1000" min="100" max="4000">
-            </div>
-
-            <div class="setting-group" id="apiKeyGroup">
-                <label class="setting-label">API Key</label>
-                <input type="password" class="setting-input" id="apiKey"
-                    placeholder="Enter your API key...">
-                <a href="#" id="getKeyLink" target="_blank" style="display: block; margin-top: 8px; font-size: 0.78rem; color: var(--accent-2);">
-                    &#x1F511; Get FREE API Key &#x2192;
-                </a>
             </div>
 
             <div class="setting-group">
@@ -325,78 +304,6 @@
     </div>
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="/static/js/app.js?v=12"></script>
-    <script>
-        // Provider help text and links
-        function updateProviderHelp() {
-            const provider = document.getElementById('llmProvider').value;
-            const helpText = document.getElementById('providerHelp');
-            const apiKeyGroup = document.getElementById('apiKeyGroup');
-            const getKeyLink = document.getElementById('getKeyLink');
-            const modelSelect = document.getElementById('modelName');
-
-            const providerInfo = {
-                'ollama': {
-                    help: 'Run locally with Ollama - no internet or API key needed',
-                    showKey: false,
-                    link: 'https://ollama.ai/download',
-                    models: [
-                        {value: 'llama3.2', text: 'Llama 3.2'},
-                        {value: 'mistral', text: 'Mistral 7B'},
-                        {value: 'phi', text: 'Phi-2 (Small & Fast)'},
-                        {value: 'codellama', text: 'Code Llama'}
-                    ]
-                },
-                'groq': {
-                    help: 'Super fast inference! FREE tier: 14,400 requests/day',
-                    showKey: true,
-                    link: 'https://console.groq.com/keys',
-                    models: [
-                        {value: 'llama3-8b', text: 'Llama 3.1 8B (Fast)'},
-                        {value: 'llama3-70b', text: 'Llama 3.1 70B (Best)'},
-                        {value: 'gemma', text: 'Gemma 2 9B'},
-                        {value: 'mixtral', text: 'Mixtral 8x7B'}
-                    ]
-                },
-                'huggingface': {
-                    help: 'Free tier available. Some models work without API key!',
-                    showKey: true,
-                    link: 'https://huggingface.co/settings/tokens',
-                    models: [
-                        {value: 'mistral', text: 'Mistral 7B'},
-                        {value: 'zephyr', text: 'Zephyr 7B'},
-                        {value: 'falcon', text: 'Falcon 7B'},
-                        {value: 'phi', text: 'Phi-2'}
-                    ]
-                },
-                'openai': {
-                    help: 'Paid API - requires OpenAI account with credits',
-                    showKey: true,
-                    link: 'https://platform.openai.com/api-keys',
-                    models: [
-                        {value: 'gpt-3.5-turbo', text: 'GPT-3.5 Turbo'},
-                        {value: 'gpt-4', text: 'GPT-4'},
-                        {value: 'gpt-4-turbo', text: 'GPT-4 Turbo'}
-                    ]
-                }
-            };
-
-            const info = providerInfo[provider];
-            if (info) {
-                helpText.textContent = info.help;
-                apiKeyGroup.style.display = info.showKey ? 'block' : 'none';
-                getKeyLink.href = info.link;
-                getKeyLink.textContent = provider === 'ollama' ? 'Download Ollama' : 'Get FREE API Key';
-
-                // Update model dropdown
-                modelSelect.innerHTML = info.models.map(m =>
-                    `<option value="${m.value}">${m.text}</option>`
-                ).join('');
-            }
-        }
-
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', updateProviderHelp);
-    </script>
+    <script src="/static/js/app.js?v=13"></script>
 </body>
 </html>

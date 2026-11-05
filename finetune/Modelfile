@@ -1,0 +1,6 @@
+# Fine-tuned story model: llama3.2:3b + LoRA adapter trained on the Q&A-to-story dataset
+FROM llama3.2:3b
+ADAPTER ./storyforge-lora.gguf
+PARAMETER temperature 0.8
+PARAMETER top_p 0.9
+PARAMETER num_ctx 4096

@@ -1,0 +1,27 @@
+== base
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 1758.00it/s]
+   20/191
+   40/191
+   60/191
+   80/191
+   100/191
+   120/191
+   140/191
+   160/191
+   180/191
+   overall loss 1.5214  perplexity 4.579
+== finetuned
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 578.35it/s]
+   20/191
+   40/191
+   60/191
+   80/191
+   100/191
+   120/191
+   140/191
+   160/191
+   180/191
+   overall loss 1.1935  perplexity 3.299
+paired by sample: {'n': 191, 'mean_base': 1.5257, 'mean_finetuned': 1.1893, 'mean_difference': 0.3364, 'ci95_bootstrap': [0.3265, 0.3472], 'improved': 191, 'cohens_d': 4.559, 'paired_t': 63.0, 'paired_t_p': 2.8147422282296572e-129, 'wilcoxon_p': 4.293324680382192e-33}
+paired by story: {'n': 49, 'mean_base': 1.5629, 'mean_finetuned': 1.2224, 'mean_difference': 0.3405, 'ci95_bootstrap': [0.3255, 0.3588], 'improved': 49, 'cohens_d': 5.746, 'paired_t': 40.22, 'paired_t_p': 1.2501881275932118e-38, 'wilcoxon_p': 3.552713678800501e-15}
+saved eval_results.json

@@ -1,0 +1,66 @@
+{
+  "source": "FareedKhan/1k_stories_100_genre (CC-BY-2.0)",
+  "stories": 1000,
+  "splits": {
+    "train": {
+      "stories": 900,
+      "samples": 3321,
+      "dropped_too_long": 0,
+      "by_kind": {
+        "init": 893,
+        "continuation": 1122,
+        "resolution": 805,
+        "climax": 501
+      },
+      "init_by_budget": {
+        "4": 76,
+        "8": 134,
+        "12": 223,
+        "17": 460
+      },
+      "mean_words_per_sample": 721.1,
+      "max_words_per_sample": 985,
+      "mean_target_words": 264.4
+    },
+    "valid": {
+      "stories": 50,
+      "samples": 183,
+      "dropped_too_long": 0,
+      "by_kind": {
+        "continuation": 64,
+        "resolution": 46,
+        "init": 50,
+        "climax": 23
+      },
+      "init_by_budget": {
+        "4": 7,
+        "8": 7,
+        "12": 10,
+        "17": 26
+      },
+      "mean_words_per_sample": 722.5,
+      "max_words_per_sample": 953,
+      "mean_target_words": 269.7
+    },
+    "test": {
+      "stories": 50,
+      "samples": 191,
+      "dropped_too_long": 0,
+      "by_kind": {
+        "climax": 25,
+        "resolution": 46,
+        "init": 49,
+        "continuation": 71
+      },
+      "init_by_budget": {
+        "4": 7,
+        "8": 4,
+        "12": 13,
+        "17": 25
+      },
+      "mean_words_per_sample": 729.4,
+      "max_words_per_sample": 948,
+      "mean_target_words": 267.0
+    }
+  }
+}

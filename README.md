@@ -32,7 +32,7 @@ This M-Tech project implements a multi-module architecture for AI-powered intera
    ```bash
    python --version
    ```
-
+start working 
 2. **Ollama** (for local LLM)
    - Download from: https://ollama.ai/download
    - Or install via terminal:

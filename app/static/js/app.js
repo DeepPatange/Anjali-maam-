@@ -1194,6 +1194,13 @@ class StoryForgeApp {
     closeAllModals() { document.querySelectorAll('.modal-overlay').forEach(m => m.remove()); }
 
     // ==================== LLM Status ====================
+    modelLabel(model) {
+        const name = (model || '').toLowerCase();
+        if (name.startsWith('storyforge')) return 'Llama 3.2 (fine-tuned)';
+        if (name.startsWith('llama3.2')) return 'Llama 3.2';
+        return model || 'Llama';
+    }
+
     async checkLLMStatus() {
         try {
             const response = await fetch('/api/status');
@@ -1202,11 +1209,15 @@ class StoryForgeApp {
             const statusText = document.getElementById('statusText');
             if (data.llm_available) {
                 statusDot?.classList.add('online');
-                statusText.textContent = `Connected to ${data.model}`;
+                statusText.textContent = `Connected to ${this.modelLabel(data.model)}`;
+                const modelSelect = document.getElementById('modelName');
+                if (modelSelect && [...modelSelect.options].some(o => o.value === data.model)) {
+                    modelSelect.value = data.model;
+                }
             } else {
                 statusDot?.classList.remove('online');
-                statusText.textContent = 'AI Offline - Configure in Settings';
-                this.showNotification('Configure an AI provider in Settings to generate stories', 'error');
+                statusText.textContent = 'Llama model offline';
+                this.showNotification('The Llama model is not running. Start Ollama and reload the page.', 'error');
             }
         } catch (error) {
             console.error('Status check failed:', error);
@@ -1242,10 +1253,9 @@ class StoryForgeApp {
 
     async saveSettings() {
         const settings = {
-            provider: document.getElementById('llmProvider')?.value,
+            provider: document.getElementById('llmProvider')?.value || 'ollama',
             model: document.getElementById('modelName')?.value,
-            temperature: parseFloat(document.getElementById('temperature')?.value),
-            api_key: document.getElementById('apiKey')?.value
+            temperature: parseFloat(document.getElementById('temperature')?.value)
         };
         try {
             await fetch('/api/settings', {

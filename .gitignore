@@ -16,3 +16,20 @@ server.log
 *.lof
 *.lot
 *.synctex.gz
+
+# Fine-tuning: environment, raw download, checkpoints, run files
+finetune/.venv/
+finetune/data/raw/
+finetune/adapters/0*_adapters.safetensors
+finetune/train.pid
+finetune/*.pid
+*.fls
+*.fdb_latexmk
+*.bbl
+*.bib.old
+
+# Format reference copied from another student's report (not part of this project)
+Brownbook format/
+
+# Separate clone of the Netlify site (already merged at repo root)
+netlify-static/

@@ -234,6 +234,10 @@ async def generate_story(data: StoryGenerationRequest):
     session = sessions[data.session_id]
 
     try:
+        # A new story starts from a clean slate
+        story_generator.clear_history()
+        flow_manager.reset()
+
         # Extract context from responses
         context = session["context_engine"].extract_from_responses(data.responses)
 
@@ -311,11 +315,15 @@ async def continue_story(data: StoryContinuationRequest):
                 context, previous_content, data.user_choice
             )
 
-        # Generate continuation
+        # Generate continuation. The prompt already carries the recent story text,
+        # so local models (small context window) are not sent the history again.
+        history = None
+        if story_generator.config.provider != LLMProvider.OLLAMA:
+            history = story_generator.get_history()
         story_content = await story_generator.generate_story_segment(
             system_prompt,
             user_prompt,
-            story_generator.get_history()
+            history
         )
 
         # Format output

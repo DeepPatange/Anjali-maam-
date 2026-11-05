@@ -11,8 +11,8 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent
 
 # LLM Configuration
-LLM_PROVIDER = os.getenv("LLM_PROVIDER", "groq")  # Options: "ollama", "openai", "groq", "huggingface"
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "llama3-8b")  # Model name (also used for Groq)
+LLM_PROVIDER = os.getenv("LLM_PROVIDER", "ollama")  # local Llama through Ollama
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "storyforge")  # fine-tuned Llama 3.2 (see finetune/)
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 
 # Groq Configuration (FREE)
